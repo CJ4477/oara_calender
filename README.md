@@ -1,3 +1,10 @@
+
+## 🔒 Admin Console Login (`https://clintjoy.github.io/oara_calender/admin`)
+The Admin Console is protected by a username and password prompt so regular visitors cannot delete events, reset data, or trigger monthly repo packs.
+- **Default Username**: `admin`
+- **Default Password**: `oara2026`
+- **Change Credentials**: Once signed in to `/admin`, click **🔑 Credentials** in the top Admin bar to customize the username and password, or click **🔒 Logout** to lock the console.
+
 # OARA Social Calendar & Reminder Hub (iOS & Android Deployment Package)
 
 This folder is a complete, ready-to-deploy **Progressive Web App (PWA)** and **Capacitor Mobile Package** for the **Orchid Avenue Residents Association (OARA)** Social Calendar.

@@ -76,6 +76,34 @@
     </div>
   </div>
 
+  <!-- Admin Console Mode Bar (Shown ONLY on /admin or #/admin route) -->
+  <div id="adminConsoleTopBar" class="hidden bg-slate-900 text-white border-b border-slate-700 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[11px] font-extrabold uppercase tracking-wider">🛡️ Admin Console</span>
+        <span class="text-xs sm:text-sm font-bold text-white">clintjoy.github.io/oara_calender/admin</span>
+        <span class="hidden md:inline text-xs text-slate-400">• Delete Events, Backup/Restore &amp; Monthly Repo Pack-Up Unlocked</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="adminBarOpenBackupBtn" type="button" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 text-xs font-bold transition">
+          ⚙️ Backup / Restore
+        </button>
+        <button id="adminBarOpenRepoPackBtn" type="button" class="px-3 py-1 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition">
+          📦 Monthly Repo Pack
+        </button>
+        <button id="adminBarChangePassBtn" type="button" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-300 border border-slate-700 text-xs font-bold transition">
+          🔑 Credentials
+        </button>
+        <button id="adminLogoutBtn" type="button" class="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition">
+          🔒 Logout
+        </button>
+        <button id="exitAdminConsoleBtn" type="button" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition">
+          ← Switch to Public View
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Header -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
@@ -108,10 +136,10 @@
             <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">OARA Official Calendar</span>
             <span id="liveClockBadge" class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Loading time...</span>
           </div>
-          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 ml-font leading-snug mt-0.5">
-            ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-snug mt-0.5">
+            Orchid Avenue Residents Association (OARA)
           </h1>
-          <p class="text-xs text-slate-500">Orchid Avenue Residents Association • Social Calendar, Custom Reminders &amp; WhatsApp Wishes Hub</p>
+          <p class="text-xs text-slate-500">Social Calendar, Custom Reminders &amp; WhatsApp Wishes Hub</p>
         </div>
       </div>
 
@@ -141,7 +169,7 @@
           <span>WhatsApp Wishes</span>
         </button>
 
-        <button id="openRepoSyncModalBtn" type="button" class="px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
+        <button id="openRepoSyncModalBtn" type="button" class="admin-only-el hidden px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
           <span>📦 Monthly Repo Pack</span>
           <span id="repoUnsavedBadge" class="hidden px-1.5 py-0.2 rounded-full bg-amber-300 text-slate-950 text-[10px] font-extrabold">New</span>
         </button>
@@ -162,6 +190,42 @@
 
   <!-- Main Content Container -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Admin Console Dashboard Hub (Visible ONLY in /admin Console) -->
+    <section id="adminDashboardHeroSection" class="admin-only-el hidden bg-gradient-to-r from-slate-900 via-violet-950 to-indigo-950 text-white rounded-2xl p-4 sm:p-5 shadow-md border border-violet-500/40">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[11px] font-extrabold uppercase tracking-wider">Monthly Repo Sync &amp; Push Alerts</span>
+            <span id="dashboardRepoStatusPill" class="text-xs font-semibold text-violet-200">Ready to pack monthly changes to repo</span>
+          </div>
+          <h2 class="text-base sm:text-lg font-extrabold flex items-center gap-2">
+            <span>📦 Monthly Repo Data Pack-Up &amp; 📲 Mobile Push Notifications</span>
+          </h2>
+          <p class="text-xs text-violet-100/90 max-w-2xl">
+            Pack this month's updated birthdays &amp; anniversaries into your Git repository (<code>data/oara_events.json</code> or monthly JSON) and trigger real push notifications to iOS &amp; Android.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button id="heroPackCurrentMonthBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-extrabold shadow-sm flex items-center gap-1.5 transition">
+            <span>📦 Pack Current Month JSON</span>
+          </button>
+          <button id="heroPackFullRepoBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/20 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition">
+            <span>⬇️ Pack All 12 Months (oara_events.json)</span>
+          </button>
+          <button id="heroOpenGithubSyncBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-400 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
+            <span>🚀 GitHub Repo Commit / Setup</span>
+          </button>
+          <button id="heroSendPhonePushBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-extrabold shadow-sm flex items-center gap-1.5 transition">
+            <span>📲 Send Push Alert Now</span>
+          </button>
+          <button id="heroOpenBackupModalBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
+            <span>⚙️ Backup / Reset Data</span>
+          </button>
+        </div>
+      </div>
+    </section>
 
     <!-- Top Summary KPI & Upcoming Celebrations Spotlight -->
     <section class="grid grid-cols-1 lg:grid-cols-12 gap-5">
@@ -268,7 +332,11 @@
             <option value="ANNIVERSARY">💍 Anniversaries Only</option>
           </select>
 
-          <button id="openDataToolsBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600 flex items-center gap-1 transition" title="Export, Import or Reset Calendar Data">
+          <button id="filterBarRepoPackBtn" type="button" class="admin-only-el hidden px-3 py-1.5 rounded-xl bg-violet-50 hover:bg-violet-100 text-violet-800 border border-violet-200 text-xs font-bold flex items-center gap-1 transition" title="Pack Monthly Data to Repo (Admin Only)">
+            <span>📦 Monthly Repo Pack</span>
+          </button>
+
+          <button id="openDataToolsBtn" type="button" class="admin-only-el hidden px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600 flex items-center gap-1 transition" title="Export, Import or Reset Calendar Data (Admin Only)">
             <span>⚙️ Data / Reset</span>
           </button>
         </div>
@@ -291,13 +359,15 @@
   <footer class="bg-white border-t border-slate-200 mt-10 py-5">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
       <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-700 ml-font">ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)</span>
+        <span class="font-bold text-slate-700">Orchid Avenue Residents Association (OARA)</span>
         <span>•</span>
         <span>All 105 events pre-loaded from the official OARA Social Calendar PDF</span>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex flex-wrap items-center gap-3">
         <span>Auto-saved locally in your browser</span>
         <button id="footerAddEventBtn" type="button" class="text-indigo-600 hover:underline font-semibold">+ Add New Event</button>
+        <span>•</span>
+        <a id="adminRouteToggleLink" href="#/admin" class="text-slate-400 hover:text-indigo-600 font-semibold transition" title="Preview /admin Console route">🛡️ Admin Console (/admin)</a>
       </div>
     </div>
   </footer>
@@ -430,7 +500,7 @@
             <select id="wishesTemplateStyleSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
               <option value="oara_bilingual">🌸 OARA Malayalam + English (Official Group Style)</option>
               <option value="oara_english">🎉 OARA Warm English Group Wish</option>
-              <option value="oara_malayalam">🌴 Pure Malayalam Greeting (മലയാളം ആശംസകൾ)</option>
+              <option value="oara_malayalam">🌴 Pure Malayalam Greeting</option>
               <option value="oara_short">✨ Short &amp; Festive WhatsApp Banner</option>
             </select>
           </div>
@@ -612,6 +682,9 @@
           <div class="text-xs font-bold text-slate-800">Export / Import Calendar JSON</div>
           <p class="text-xs text-slate-500">Save a backup of your customized OARA events and reminder times or share it with another committee member.</p>
           <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button id="openRepoHubFromDataModalBtn" type="button" class="w-full px-3.5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-extrabold transition flex items-center justify-center gap-1.5">
+              <span>📦 Open Monthly Repo Pack-Up &amp; GitHub Sync Hub</span>
+            </button>
             <button id="exportJsonBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
               ⬇️ Export JSON Backup
             </button>
@@ -797,7 +870,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
               <label for="ghRepoOwnerInput" class="block text-[11px] font-semibold text-slate-600 mb-1">GitHub Repo (owner/repo)</label>
-              <input id="ghRepoOwnerInput" type="text" placeholder="e.g. oara-koonammavu/social-calendar" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs" />
+              <input id="ghRepoOwnerInput" type="text" value="clintjoy/oara_calender" placeholder="clintjoy/oara_calender" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs" />
             </div>
             <div>
               <label for="ghBranchInput" class="block text-[11px] font-semibold text-slate-600 mb-1">Branch &amp; Target File Path</label>
@@ -823,6 +896,82 @@
           Close
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- 8. Admin Console Login Modal -->
+  <div id="adminLoginModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-lg">🔒</span>
+          <div>
+            <h3 class="text-base font-bold">OARA Admin Console</h3>
+            <p class="text-[11px] text-slate-300">Sign in to access Delete, Backup &amp; Repo Pack</p>
+          </div>
+        </div>
+        <button id="closeAdminLoginModalBtn" type="button" class="w-8 h-8 rounded-lg text-white/70 hover:text-white hover:bg-white/10 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <form id="adminLoginForm" class="p-5 space-y-4">
+        <div id="adminLoginErrorBox" class="hidden p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700">
+          Invalid username or password. Please try again.
+        </div>
+
+        <div>
+          <label for="adminUsernameInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Admin Username</label>
+          <input id="adminUsernameInput" type="text" required autocomplete="username" placeholder="Enter username" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+        </div>
+
+        <div>
+          <label for="adminPasswordInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Password</label>
+          <input id="adminPasswordInput" type="password" required autocomplete="current-password" placeholder="Enter password" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+        </div>
+
+        <div class="flex items-center justify-between">
+          <label class="inline-flex items-center gap-1.5 cursor-pointer">
+            <input id="adminRememberMeInput" type="checkbox" class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+            <span class="text-xs font-medium text-slate-600">Remember me on this device</span>
+          </label>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+          <button id="cancelAdminLoginBtn" type="button" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600">
+            Public View
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition">
+            Unlock Admin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 9. Change Admin Credentials Modal -->
+  <div id="adminCredentialsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold">🔑 Update Admin Credentials</h3>
+          <p class="text-[11px] text-slate-300">Set custom Admin username &amp; password</p>
+        </div>
+        <button id="closeAdminCredentialsModalBtn" type="button" class="w-8 h-8 rounded-lg text-white/70 hover:text-white hover:bg-white/10 flex items-center justify-center font-bold">✕</button>
+      </div>
+      <form id="adminCredentialsForm" class="p-5 space-y-3.5">
+        <div>
+          <label for="newAdminUserInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">New Admin Username *</label>
+          <input id="newAdminUserInput" type="text" required class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+        </div>
+        <div>
+          <label for="newAdminPassInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">New Admin Password *</label>
+          <input id="newAdminPassInput" type="text" required class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+        </div>
+        <p class="text-[11px] text-slate-500">Default repo credentials are <code>admin</code> / <code>oara2026</code>. Updating here saves your custom login on this browser.</p>
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+          <button id="cancelAdminCredentialsBtn" type="button" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">Save Login</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -996,16 +1145,21 @@
         groupInviteUrl: '',
         ntfyTopic: 'oara-social-calendar-alerts',
         ntfyAutoPush: true,
-        ghRepo: '',
+        ghRepo: 'clintjoy/oara_calender',
         ghBranch: 'main',
         ghToken: '',
         lastPackedMonth: '',
-        unsavedRepoEdits: 0
+        unsavedRepoEdits: 0,
+        adminUser: 'admin',
+        adminPass: 'oara2026'
       },
       firedLog: {}, // key: "YYYY-MM-DD_eventId_HH:MM" -> true
       activeWishesEventId: null,
-      confirmCallback: null
+      confirmCallback: null,
+      isAdminRoute: false,
+      isAdminAuthenticated: false
     };
+    const STORAGE_KEY_ADMIN_SESSION = 'oara_admin_auth_session_v1';
 
     function formatDateISO(d) {
       const yr = d.getFullYear();
@@ -1202,7 +1356,91 @@
     // ============================================================================
     // 6. UI RENDERING FUNCTIONS
     // ============================================================================
+    function detectAdminRoute() {
+      const path = (window.location.pathname || '').toLowerCase();
+      const hash = (window.location.hash || '').toLowerCase();
+      const search = (window.location.search || '').toLowerCase();
+      return Boolean(
+        window.OARA_FORCE_ADMIN ||
+        path.endsWith('/admin') ||
+        path.endsWith('/admin/') ||
+        path.includes('/admin/index.html') ||
+        hash === '#/admin' ||
+        hash === '#admin' ||
+        search.includes('admin=1') ||
+        search.includes('mode=admin')
+      );
+    }
+
+    function checkStoredAdminSession() {
+      try {
+        return (
+          sessionStorage.getItem(STORAGE_KEY_ADMIN_SESSION) === '1' ||
+          localStorage.getItem(STORAGE_KEY_ADMIN_SESSION) === '1'
+        );
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function setAdminSession(authenticated, rememberDevice) {
+      appState.isAdminAuthenticated = Boolean(authenticated);
+      try {
+        if (authenticated) {
+          sessionStorage.setItem(STORAGE_KEY_ADMIN_SESSION, '1');
+          if (rememberDevice) {
+            localStorage.setItem(STORAGE_KEY_ADMIN_SESSION, '1');
+          }
+        } else {
+          sessionStorage.removeItem(STORAGE_KEY_ADMIN_SESSION);
+          localStorage.removeItem(STORAGE_KEY_ADMIN_SESSION);
+        }
+      } catch (e) {}
+    }
+
+    function applyAdminModeUI() {
+      const wantsAdminRoute = detectAdminRoute();
+      if (wantsAdminRoute && !appState.isAdminAuthenticated) {
+        appState.isAdminAuthenticated = checkStoredAdminSession();
+      }
+
+      const unlockedAdmin = wantsAdminRoute && appState.isAdminAuthenticated;
+      appState.isAdminRoute = unlockedAdmin;
+
+      const loginModal = document.getElementById('adminLoginModal');
+      if (wantsAdminRoute && !appState.isAdminAuthenticated) {
+        if (loginModal && loginModal.classList.contains('hidden')) {
+          document.getElementById('adminLoginErrorBox').classList.add('hidden');
+          document.getElementById('adminUsernameInput').value = '';
+          document.getElementById('adminPasswordInput').value = '';
+          loginModal.classList.remove('hidden');
+          setTimeout(() => document.getElementById('adminUsernameInput').focus(), 50);
+        }
+      } else if (loginModal) {
+        loginModal.classList.add('hidden');
+      }
+
+      const topBar = document.getElementById('adminConsoleTopBar');
+      if (topBar) {
+        topBar.classList.toggle('hidden', !unlockedAdmin);
+      }
+      document.querySelectorAll('.admin-only-el').forEach(el => {
+        el.classList.toggle('hidden', !unlockedAdmin);
+      });
+      const toggleLink = document.getElementById('adminRouteToggleLink');
+      if (toggleLink) {
+        if (unlockedAdmin) {
+          toggleLink.textContent = '🌐 Public Resident View (/)';
+          toggleLink.setAttribute('href', '#/');
+        } else {
+          toggleLink.textContent = '🔒 Admin Console (/admin)';
+          toggleLink.setAttribute('href', '#/admin');
+        }
+      }
+    }
+
     function renderAll() {
+      applyAdminModeUI();
       renderStatsAndHeader();
       renderSpotlight();
       renderMonthTabs();
@@ -1512,9 +1750,9 @@
                 <button type="button" data-action="edit" data-id="${ev.id}" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold transition" title="Edit or Alter Event">
                   ✏️
                 </button>
-                <button type="button" data-action="delete" data-id="${ev.id}" class="px-2 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-slate-200 text-xs font-semibold transition" title="Delete Event">
+                ${appState.isAdminRoute ? `<button type="button" data-action="delete" data-id="${ev.id}" class="px-2 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-slate-200 text-xs font-semibold transition" title="Delete Event (Admin Only)">
                   🗑️
-                </button>
+                </button>` : ''}
               </div>
             </td>
           </tr>
@@ -1530,7 +1768,10 @@
             </div>
             ${
               monthNumForAdd
-                ? `<button type="button" data-action="add-in-month" data-month="${monthNumForAdd}" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition">+ Add in ${MONTH_SHORT[monthNumForAdd - 1]}</button>`
+                ? `<div class="flex flex-wrap items-center gap-1.5">
+                    ${appState.isAdminRoute ? `<button type="button" data-action="pack-month" data-month="${monthNumForAdd}" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-extrabold transition" title="Pack ${MONTH_NAMES[monthNumForAdd - 1]} events into Repo JSON">📦 Pack ${MONTH_SHORT[monthNumForAdd - 1]} to Repo</button>` : ''}
+                    <button type="button" data-action="add-in-month" data-month="${monthNumForAdd}" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition">+ Add in ${MONTH_SHORT[monthNumForAdd - 1]}</button>
+                  </div>`
                 : ''
             }
           </div>
@@ -1583,7 +1824,7 @@
         document.getElementById('eventReminderEnabledInput').checked = ev.reminderEnabled !== false;
         document.getElementById('eventPhoneInput').value = ev.phone || '';
         document.getElementById('eventNotesInput').value = ev.notes || '';
-        deleteBtn.classList.remove('hidden');
+        if (appState.isAdminRoute) { deleteBtn.classList.remove('hidden'); } else { deleteBtn.classList.add('hidden'); }
       } else {
         titleEl.textContent = 'Add New Celebration to OARA Calendar';
         document.getElementById('eventIdInput').value = '';
@@ -1922,6 +2163,10 @@
         } else if (action === 'add-in-month') {
           const m = parseInt(btn.getAttribute('data-month'), 10);
           openEventModal(null, m);
+        } else if (action === 'pack-month') {
+          const m = parseInt(btn.getAttribute('data-month'), 10);
+          document.getElementById('repoPackMonthSelect').value = String(m);
+          document.getElementById('downloadRepoJsonBtn').click();
         }
       }
 
@@ -1965,7 +2210,42 @@
         appState.settings.unsavedRepoEdits = (appState.settings.unsavedRepoEdits || 0) + 1;
         saveSettingsToStorage();
         saveEventsToStorage();
-        updateRepoBadgeUI();
+        // Wire prominent Hero Monthly Repo Pack & Push buttons
+      document.getElementById('heroPackCurrentMonthBtn').addEventListener('click', () => {
+        document.getElementById('repoPackMonthSelect').value = String(appState.selectedMonth || (new Date().getMonth() + 1));
+        document.getElementById('downloadRepoJsonBtn').click();
+      });
+
+      document.getElementById('heroPackFullRepoBtn').addEventListener('click', () => {
+        document.getElementById('repoPackMonthSelect').value = 'ALL';
+        document.getElementById('downloadRepoJsonBtn').click();
+      });
+
+      document.getElementById('heroOpenGithubSyncBtn').addEventListener('click', openRepoSyncModal);
+      document.getElementById('filterBarRepoPackBtn').addEventListener('click', openRepoSyncModal);
+
+      document.getElementById('openRepoHubFromDataModalBtn').addEventListener('click', () => {
+        document.getElementById('dataToolsModal').classList.add('hidden');
+        openRepoSyncModal();
+      });
+
+      document.getElementById('heroSendPhonePushBtn').addEventListener('click', () => {
+        const refDate = parsePreviewDate();
+        const sorted = [...appState.events]
+          .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+        if (sorted.length > 0) {
+          const first = sorted[0];
+          const sameDateGroup = sorted.filter(e => e.month === first.month && e.day === first.day);
+          triggerReminderAlert(
+            sameDateGroup,
+            `OARA Push Alert (${formatShortDate(first.month, first.day)})`
+          );
+          sendNtfyPushNotification(sameDateGroup, `OARA Celebration Alert (${formatShortDate(first.month, first.day)})`, false);
+        }
+      });
+
+      updateRepoBadgeUI();
         closeEventModal();
         renderAll();
       });
@@ -2310,8 +2590,14 @@
       // Monthly Repo Pack-Up & GitHub Sync Handlers
       function updateRepoBadgeUI() {
         const badge = document.getElementById('repoUnsavedBadge');
+        const pill = document.getElementById('dashboardRepoStatusPill');
         const nowYm = formatDateISO(new Date()).slice(0, 7);
         const edits = appState.settings.unsavedRepoEdits || 0;
+        if (pill) {
+          pill.textContent = appState.settings.lastPackedMonth === nowYm && edits === 0
+            ? `✅ Packed for ${nowYm} (0 pending edits)`
+            : `⚡ ${edits} pending edit(s) • Click "Pack Current Month JSON" or "GitHub Repo Commit"`;
+        }
         const needsMonthlyPack = appState.settings.lastPackedMonth !== nowYm;
         if (edits > 0 || needsMonthlyPack) {
           badge.classList.remove('hidden');
@@ -2488,6 +2774,91 @@
       });
 
       updateRepoBadgeUI();
+
+      // Admin Console Route, Login Gate & Top Bar Listeners
+      function exitToPublicView() {
+        window.OARA_FORCE_ADMIN = false;
+        document.getElementById('adminLoginModal').classList.add('hidden');
+        if (window.location.pathname.toLowerCase().includes('/admin')) {
+          window.location.href = '../index.html';
+        } else {
+          window.location.hash = '#/';
+          renderAll();
+        }
+      }
+
+      window.addEventListener('hashchange', () => {
+        renderAll();
+        if (appState.isAdminRoute) {
+          showToast('Unlocked OARA Admin Console (/admin)', 'bg-slate-900');
+        }
+      });
+
+      document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const enteredUser = document.getElementById('adminUsernameInput').value.trim();
+        const enteredPass = document.getElementById('adminPasswordInput').value;
+        const rememberMe = document.getElementById('adminRememberMeInput').checked;
+        const validUser = (appState.settings.adminUser || 'admin').trim();
+        const validPass = appState.settings.adminPass || 'oara2026';
+
+        if (enteredUser.toLowerCase() === validUser.toLowerCase() && enteredPass === validPass) {
+          setAdminSession(true, rememberMe);
+          document.getElementById('adminLoginErrorBox').classList.add('hidden');
+          document.getElementById('adminLoginModal').classList.add('hidden');
+          renderAll();
+          showToast('Admin Console unlocked!', 'bg-emerald-600');
+        } else {
+          document.getElementById('adminLoginErrorBox').classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('closeAdminLoginModalBtn').addEventListener('click', exitToPublicView);
+      document.getElementById('cancelAdminLoginBtn').addEventListener('click', exitToPublicView);
+
+      document.getElementById('adminLogoutBtn').addEventListener('click', () => {
+        setAdminSession(false, false);
+        showToast('Logged out of Admin Console', 'bg-slate-900');
+        exitToPublicView();
+      });
+      document.getElementById('exitAdminConsoleBtn').addEventListener('click', exitToPublicView);
+
+      document.getElementById('adminBarChangePassBtn').addEventListener('click', () => {
+        document.getElementById('newAdminUserInput').value = appState.settings.adminUser || 'admin';
+        document.getElementById('newAdminPassInput').value = appState.settings.adminPass || 'oara2026';
+        document.getElementById('adminCredentialsModal').classList.remove('hidden');
+      });
+
+      document.getElementById('closeAdminCredentialsModalBtn').addEventListener('click', () => {
+        document.getElementById('adminCredentialsModal').classList.add('hidden');
+      });
+      document.getElementById('cancelAdminCredentialsBtn').addEventListener('click', () => {
+        document.getElementById('adminCredentialsModal').classList.add('hidden');
+      });
+      document.getElementById('adminCredentialsForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newU = document.getElementById('newAdminUserInput').value.trim();
+        const newP = document.getElementById('newAdminPassInput').value.trim();
+        if (!newU || !newP) return;
+        appState.settings.adminUser = newU;
+        appState.settings.adminPass = newP;
+        saveSettingsToStorage();
+        document.getElementById('adminCredentialsModal').classList.add('hidden');
+        showToast('Admin login credentials updated!', 'bg-emerald-600');
+      });
+
+      document.getElementById('adminBarOpenBackupBtn').addEventListener('click', () => {
+        if (!appState.isAdminAuthenticated) return;
+        document.getElementById('dataToolsModal').classList.remove('hidden');
+      });
+      document.getElementById('heroOpenBackupModalBtn').addEventListener('click', () => {
+        if (!appState.isAdminAuthenticated) return;
+        document.getElementById('dataToolsModal').classList.remove('hidden');
+      });
+      document.getElementById('adminBarOpenRepoPackBtn').addEventListener('click', () => {
+        if (!appState.isAdminAuthenticated) return;
+        openRepoSyncModal();
+      });
 
       // Confirm Modal buttons
       document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirmModal);
