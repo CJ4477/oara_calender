@@ -1,0 +1,6 @@
+{
+  "appId": "org.oara.socialcalendar",
+  "appName": "OARA Calendar",
+  "webDir": ".",
+  "bundledWebRuntime": false
+}

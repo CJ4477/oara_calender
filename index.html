@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OARA Social Calendar &amp; Reminder Hub</title>
+  <meta name="theme-color" content="#3730a3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="OARA Calendar" />
+  <link rel="manifest" id="pwaManifestLink" href="manifest.json" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Malayalam:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans Malayalam', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+    .ml-font {
+      font-family: 'Noto Sans Malayalam', 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @keyframes pulse-soft {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .animate-pulse-soft {
+      animation: pulse-soft 2.5s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+
+  <!-- Active Reminder Alert Banner (Hidden until triggered) -->
+  <div id="activeReminderBanner" class="hidden bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 text-white shadow-lg border-b border-amber-600/30 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm shrink-0">
+          <svg class="w-6 h-6 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+        </span>
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-100" id="bannerAlertSubtitle">Scheduled Celebration Reminder</div>
+          <div class="text-sm sm:text-base font-bold" id="bannerAlertTitle">Celebration Today!</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-end">
+        <button id="bannerSendWishesBtn" type="button" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold shadow-sm flex items-center gap-1.5 transition">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+          WhatsApp Wishes
+        </button>
+        <button id="bannerDismissBtn" type="button" class="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-white text-xs sm:text-sm font-medium transition">
+          Dismiss
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-teal-500 p-0.5 shadow-md shrink-0">
+          <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center relative overflow-hidden">
+            <!-- OARA Star Emblem SVG -->
+            <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none">
+              <polygon points="32,6 38,22 55,22 41,32 46,49 32,39 18,49 23,32 9,22 26,22" fill="url(#oaraGrad)" opacity="0.18"/>
+              <path d="M32 8L37.5 22.5L53 23L40.5 32.5L45 47.5L32 38.5L19 47.5L23.5 32.5L11 23L26.5 22.5L32 8Z" stroke="#2563eb" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="32" cy="14" r="3" fill="#ef4444"/>
+              <circle cx="49" cy="25" r="3" fill="#f59e0b"/>
+              <circle cx="43" cy="44" r="3" fill="#10b981"/>
+              <circle cx="21" cy="44" r="3" fill="#8b5cf6"/>
+              <circle cx="15" cy="25" r="3" fill="#06b6d4"/>
+              <text x="32" y="33" text-anchor="middle" font-size="8.5" font-weight="800" fill="#1e3a8a" font-family="Inter, sans-serif">OARA</text>
+              <defs>
+                <linearGradient id="oaraGrad" x1="0" y1="0" x2="64" y2="64">
+                  <stop offset="0%" stop-color="#2563eb"/>
+                  <stop offset="50%" stop-color="#10b981"/>
+                  <stop offset="100%" stop-color="#f59e0b"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">OARA Official Calendar</span>
+            <span id="liveClockBadge" class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">Loading time...</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 ml-font leading-snug mt-0.5">
+            ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)
+          </h1>
+          <p class="text-xs text-slate-500">Orchid Avenue Residents Association • Social Calendar, Custom Reminders &amp; WhatsApp Wishes Hub</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Bar -->
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Quick Reminder Time Pill -->
+        <div class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/70 px-3 py-1.5 rounded-xl border border-slate-200 transition">
+          <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <label for="quickDefaultTimeInput" class="text-xs font-semibold text-slate-700 whitespace-nowrap">Remind at:</label>
+          <input id="quickDefaultTimeInput" type="time" value="08:00" class="bg-white text-xs font-bold text-indigo-700 px-2 py-1 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <button id="openReminderSettingsBtn" type="button" class="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span>Reminder Setup</span>
+          <span id="reminderStatusDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        </button>
+
+        <button id="openGroupWishesStudioBtn" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/>
+          </svg>
+          <span>WhatsApp Wishes</span>
+        </button>
+
+        <button id="openMobileDeployModalBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
+          <span>📱 iOS / Android Setup</span>
+        </button>
+
+        <button id="openAddEventBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Add Event</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- Top Summary KPI & Upcoming Celebrations Spotlight -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <!-- Left: Stats & Date Simulator / Reminder Status -->
+      <div class="lg:col-span-5 grid grid-cols-2 sm:grid-cols-2 gap-3.5">
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Events</span>
+            <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">📅</span>
+          </div>
+          <div class="mt-2">
+            <div class="text-2xl sm:text-3xl font-extrabold text-slate-900" id="statTotalEvents">105</div>
+            <div class="text-xs text-slate-500 mt-0.5" id="statBreakdownText">76 Birthdays • 29 Anniversaries</div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Active Reminders</span>
+            <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">🔔</span>
+          </div>
+          <div class="mt-2">
+            <div class="text-2xl sm:text-3xl font-extrabold text-slate-900" id="statActiveReminders">105</div>
+            <div class="text-xs text-emerald-600 font-medium mt-0.5" id="statReminderTimeSub">Daily at 08:00 AM</div>
+          </div>
+        </div>
+
+        <div class="col-span-2 bg-gradient-to-br from-indigo-900 via-indigo-800 to-blue-900 text-white rounded-2xl p-4 shadow-md flex flex-col justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-200">Live Reminder Engine</span>
+            </div>
+            <button id="testNotificationBtn" type="button" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white transition flex items-center gap-1">
+              <span>🔊 Test Alert Now</span>
+            </button>
+          </div>
+          <div class="mt-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <div class="text-sm font-semibold text-white" id="nextReminderSummaryText">Checking next scheduled reminder...</div>
+              <div class="text-xs text-indigo-200 mt-0.5">Checks every 15s • Triggers audio chime, banner &amp; WhatsApp card</div>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <label for="previewDatePicker" class="text-[11px] text-indigo-200 font-medium">Check date:</label>
+              <input id="previewDatePicker" type="date" class="bg-white/10 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-white/20 focus:outline-none focus:ring-2 focus:ring-amber-400" />
+              <button id="resetTodayBtn" type="button" class="text-[11px] bg-white/15 hover:bg-white/25 px-2 py-1.5 rounded-lg font-semibold transition" title="Jump back to Today">Today</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Today's & Upcoming Celebrations Spotlight -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span>🎉 Celebrations on Selected Date &amp; Upcoming</span>
+              <span id="selectedDateLabel" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">Today</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">Send instant WhatsApp group wishes or customize individual reminder times</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="sendBatchTodayWishesBtn" type="button" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition">
+              <span>💬 Wish Today's / Next Group</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="spotlightContainer" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-56 overflow-y-auto custom-scrollbar pr-1">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation & Filter Bar -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- View Mode Tabs -->
+        <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
+          <button type="button" data-view-mode="monthly" class="view-mode-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-sm transition">
+            🗓️ Monthly Social Calendar
+          </button>
+          <button type="button" data-view-mode="all" class="view-mode-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+            📋 All 12 Months List
+          </button>
+          <button type="button" data-view-mode="upcoming" class="view-mode-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
+            ⏳ Next 30 Days (<span id="upcoming30CountBadge">0</span>)
+          </button>
+        </div>
+
+        <!-- Search, Type Filter & Backup Controls -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="relative flex-1 sm:w-64">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input id="searchInput" type="text" placeholder="Search resident name or date (e.g. 24-Apr)..." class="w-full pl-9 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <button id="clearSearchBtn" type="button" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold">✕</button>
+          </div>
+
+          <select id="typeFilterSelect" aria-label="Filter by Event Type" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="ALL">All Types (Birthdays &amp; Anniversaries)</option>
+            <option value="BIRTHDAY">🎂 Birthdays Only</option>
+            <option value="ANNIVERSARY">💍 Anniversaries Only</option>
+          </select>
+
+          <button id="openDataToolsBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600 flex items-center gap-1 transition" title="Export, Import or Reset Calendar Data">
+            <span>⚙️ Data / Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 12 Month Pills Bar (shown in Monthly mode) -->
+      <div id="monthTabsBar" class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-12 gap-1.5 pt-1">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- Events Display Section -->
+    <section id="eventsDisplaySection" class="space-y-6">
+      <!-- Populated dynamically by JS -->
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-10 py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-700 ml-font">ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)</span>
+        <span>•</span>
+        <span>All 105 events pre-loaded from the official OARA Social Calendar PDF</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span>Auto-saved locally in your browser</span>
+        <button id="footerAddEventBtn" type="button" class="text-indigo-600 hover:underline font-semibold">+ Add New Event</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Add / Edit Event Modal -->
+  <div id="eventFormModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h3 id="eventModalTitle" class="text-base font-bold text-slate-900">Add New Celebration Event</h3>
+          <p class="text-xs text-slate-500">Alter existing OARA calendar details or add a new resident celebration</p>
+        </div>
+        <button id="closeEventModalBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <form id="eventForm" class="p-5 space-y-4">
+        <input type="hidden" id="eventIdInput" value="" />
+
+        <div>
+          <label for="eventNameInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Resident / Couple Name *</label>
+          <input id="eventNameInput" type="text" required placeholder="e.g., Jithin Raj or Shithu & Sijo" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label for="eventTypeInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Celebration Type *</label>
+            <select id="eventTypeInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="BIRTHDAY">🎂 BIRTHDAY</option>
+              <option value="ANNIVERSARY">💍 ANNIVERSARY</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="eventMonthInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Month *</label>
+            <select id="eventMonthInput" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="eventDayInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Day (1-31) *</label>
+            <input id="eventDayInput" type="number" min="1" max="31" required value="1" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100 space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-indigo-950">Custom Reminder Time for this Event</div>
+              <div class="text-[11px] text-indigo-700">Leave blank to use your global default reminder time (<span id="modalDefaultTimeHint">08:00</span>)</div>
+            </div>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input id="eventReminderEnabledInput" type="checkbox" checked class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500" />
+              <span class="text-xs font-semibold text-indigo-900">Remind Me</span>
+            </label>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="eventCustomTimeInput" class="block text-[11px] font-semibold text-indigo-900 mb-1">Specific Time (Optional)</label>
+              <input id="eventCustomTimeInput" type="time" class="w-full px-3 py-1.5 rounded-lg border border-indigo-200 bg-white text-xs font-bold text-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label for="eventPhoneInput" class="block text-[11px] font-semibold text-indigo-900 mb-1">WhatsApp Number (Optional)</label>
+              <input id="eventPhoneInput" type="tel" placeholder="e.g. +919876543210 (optional)" class="w-full px-3 py-1.5 rounded-lg border border-indigo-200 bg-white text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="eventNotesInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">House No. / Custom Note (Optional)</label>
+          <input id="eventNotesInput" type="text" placeholder="e.g., Plot 14, Orchid Avenue / Special Milestone" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+          <button id="deleteEventFromModalBtn" type="button" class="hidden px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">
+            🗑️ Delete Event
+          </button>
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="cancelEventModalBtn" type="button" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs sm:text-sm font-semibold text-slate-600">
+              Cancel
+            </button>
+            <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition">
+              Save Event
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. WhatsApp Group Wishes Studio Modal -->
+  <div id="wishesModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="px-5 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg">💬</span>
+          <div>
+            <h3 class="text-base font-bold">OARA WhatsApp Group Wishes Studio</h3>
+            <p class="text-xs text-emerald-100" id="wishesModalSubtitle">Craft &amp; send celebration greetings to the OARA WhatsApp group</p>
+          </div>
+        </div>
+        <button id="closeWishesModalBtn" type="button" class="w-8 h-8 rounded-lg text-white/80 hover:text-white hover:bg-white/10 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto custom-scrollbar space-y-4">
+        <!-- Event Selector / Batch Switcher -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <div>
+            <label for="wishesEventSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Select Celebration</label>
+            <select id="wishesEventSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <div>
+            <label for="wishesTemplateStyleSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Greeting Style / Language</label>
+            <select id="wishesTemplateStyleSelect" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="oara_bilingual">🌸 OARA Malayalam + English (Official Group Style)</option>
+              <option value="oara_english">🎉 OARA Warm English Group Wish</option>
+              <option value="oara_malayalam">🌴 Pure Malayalam Greeting (മലയാളം ആശംസകൾ)</option>
+              <option value="oara_short">✨ Short &amp; Festive WhatsApp Banner</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Same-Day Multi-Celebration Toggle -->
+        <div id="sameDayCombineBox" class="hidden px-3.5 py-2.5 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between gap-3">
+          <div class="text-xs text-amber-900">
+            <span class="font-bold">✨ Multiple celebrations on <span id="sameDayDateLabel">this date</span>!</span>
+            <span class="block text-[11px] text-amber-700">Combine everyone on this date into a single OARA WhatsApp group post?</span>
+          </div>
+          <label class="inline-flex items-center gap-1.5 cursor-pointer shrink-0">
+            <input id="combineSameDayCheckbox" type="checkbox" class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500" />
+            <span class="text-xs font-bold text-amber-900">Combine All</span>
+          </label>
+        </div>
+
+        <!-- Editable Message Preview -->
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label for="wishesMessageTextarea" class="text-xs font-bold uppercase tracking-wider text-slate-600">WhatsApp Message (Editable before sending)</label>
+            <span class="text-[11px] text-slate-400">Supports WhatsApp *bold* &amp; emojis</span>
+          </div>
+          <textarea id="wishesMessageTextarea" rows="7" class="w-full p-3.5 rounded-xl border border-slate-300 bg-emerald-50/20 text-xs sm:text-sm font-medium text-slate-800 ml-font leading-relaxed focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+
+        <!-- Optional Group Link / Direct Number Info -->
+        <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="text-xs font-bold text-slate-800">How WhatsApp Group Sending Works</div>
+              <div class="text-[11px] text-slate-500">Clicking <b>"Share to WhatsApp Group"</b> opens WhatsApp with this message pre-filled so you can tap your <b>OARA Residents Group</b> and hit send.</div>
+            </div>
+            <button id="toggleGroupInviteLinkBtn" type="button" class="text-xs font-semibold text-emerald-700 hover:underline shrink-0">
+              + Set OARA Group Link / Direct Number
+            </button>
+          </div>
+          <div id="groupInviteLinkConfigBox" class="hidden pt-2 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div>
+              <label for="savedGroupInviteInput" class="block text-[11px] font-semibold text-slate-600 mb-1">OARA WhatsApp Group Invite URL (Optional)</label>
+              <input id="savedGroupInviteInput" type="url" placeholder="https://chat.whatsapp.com/..." class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs" />
+            </div>
+            <div>
+              <label for="directPhoneOverrideInput" class="block text-[11px] font-semibold text-slate-600 mb-1">Or Direct Resident Phone (Optional)</label>
+              <input id="directPhoneOverrideInput" type="tel" placeholder="e.g. 919876543210 (leave empty for Group picker)" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <button id="copyWishesBtn" type="button" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-2xs transition">
+            <span>📋 Copy Message</span>
+          </button>
+          <button id="openGroupInviteBtn" type="button" class="hidden px-3 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-xs font-semibold transition">
+            🔗 Open OARA Group Link
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="sendWhatsAppGroupBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-sm transition">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824z"/></svg>
+            <span>Share to WhatsApp Group</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Reminder & Notification Settings Modal -->
+  <div id="reminderSettingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg">🔔</span>
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Reminder &amp; Notification Settings</h3>
+            <p class="text-xs text-slate-500">Configure when and how you get reminded for OARA events</p>
+          </div>
+        </div>
+        <button id="closeReminderSettingsBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div>
+            <div class="text-sm font-bold text-slate-900">Enable Scheduled Reminders</div>
+            <div class="text-xs text-slate-500">Automatically trigger alerts at your chosen reminder time</div>
+          </div>
+          <label class="inline-flex items-center cursor-pointer">
+            <input id="masterReminderToggle" type="checkbox" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div>
+            <label for="settingsDefaultTimeInput" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">Default Reminder Time</label>
+            <input id="settingsDefaultTimeInput" type="time" value="08:00" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm font-bold text-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <p class="text-[11px] text-slate-500 mt-1">Used for all events unless an event has its own custom time</p>
+          </div>
+
+          <div>
+            <label for="settingsAdvanceDaysSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">When to Remind</label>
+            <select id="settingsAdvanceDaysSelect" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="same_day">On the day of celebration</option>
+              <option value="both">Both 1 day before &amp; on the day</option>
+              <option value="day_before">1 day before celebration</option>
+            </select>
+            <p class="text-[11px] text-slate-500 mt-1">Helps you prepare wishes or gifts ahead of time</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+          <div>
+            <div class="text-sm font-bold text-slate-900">Celebration Chime Sound</div>
+            <div class="text-xs text-slate-500">Play a pleasant musical chime when a reminder triggers</div>
+          </div>
+          <label class="inline-flex items-center cursor-pointer">
+            <input id="soundChimeToggle" type="checkbox" checked class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500" />
+          </label>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="text-xs font-bold text-indigo-950">Browser Desktop / Mobile Notifications</div>
+            <div id="browserPermStatusText" class="text-[11px] text-indigo-700">Allow system notifications so reminders pop up even when you're in another tab.</div>
+          </div>
+          <button id="requestBrowserPermBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 shadow-2xs transition">
+            Enable Browser Alerts
+          </button>
+        </div>
+      </div>
+
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+        <button id="triggerSampleAlertFromSettingsBtn" type="button" class="px-3.5 py-2 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition">
+          🔔 Simulate Reminder Now
+        </button>
+        <button id="saveReminderSettingsBtn" type="button" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Data Backup / Reset / Confirmation Modal -->
+  <div id="dataToolsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+        <h3 class="text-base font-bold text-slate-900">Calendar Data Backup &amp; Reset</h3>
+        <button id="closeDataToolsBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+          <div class="text-xs font-bold text-slate-800">Export / Import Calendar JSON</div>
+          <p class="text-xs text-slate-500">Save a backup of your customized OARA events and reminder times or share it with another committee member.</p>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button id="exportJsonBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
+              ⬇️ Export JSON Backup
+            </button>
+            <label class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold cursor-pointer transition">
+              <span>⬆️ Import JSON File</span>
+              <input id="importJsonInput" type="file" accept=".json,application/json" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 space-y-2">
+          <div class="text-xs font-bold text-rose-900">Restore Original OARA Social Calendar PDF Data</div>
+          <p class="text-xs text-rose-700">This resets all events back to the original 105 celebrations from the attached OARA Social Calendar PDF.</p>
+          <button id="resetDefaultDataBtn" type="button" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition">
+            🔄 Reset to Original PDF Events
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. In-Page Confirm Action Modal -->
+  <div id="confirmModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 p-5 space-y-4">
+      <h3 id="confirmModalTitle" class="text-base font-bold text-slate-900">Confirm Action</h3>
+      <p id="confirmModalMessage" class="text-xs sm:text-sm text-slate-600">Are you sure you want to proceed?</p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button id="confirmCancelBtn" type="button" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-semibold text-slate-600">Cancel</button>
+        <button id="confirmProceedBtn" type="button" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. iOS / Android Mobile App & Deployment Hub Modal -->
+  <div id="mobileDeployModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+      <div class="px-5 py-4 bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-lg">📱</span>
+          <div>
+            <h3 class="text-base font-bold">Use on iOS &amp; Android (PWA + Native Calendar Alarms)</h3>
+            <p class="text-xs text-indigo-200">Install on your phone Home Screen &amp; enable 100% reliable background lock-screen reminders</p>
+          </div>
+        </div>
+        <button id="closeMobileDeployModalBtn" type="button" class="w-8 h-8 rounded-lg text-white/80 hover:text-white hover:bg-white/10 flex items-center justify-center font-bold">✕</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto custom-scrollbar space-y-4">
+        <!-- Native OS Lock-Screen Alarm Sync (.ics) -->
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-600 text-white">Recommended for Background Lock-Screen Alerts</span>
+            <span class="text-xs font-bold text-emerald-900">Works Offline on iPhone &amp; Android</span>
+          </div>
+          <h4 class="text-sm font-extrabold text-slate-900">1. Sync All OARA Reminders to Apple Calendar (iOS) / Google Calendar (Android)</h4>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            iOS and Android battery savers pause browser tabs when your phone is locked. Exporting an <b>.ics Calendar Alarm file</b> adds all <span id="icsEventCountText" class="font-bold">105</span> yearly recurring OARA birthdays &amp; anniversaries directly to your phone's native calendar with an automatic lock-screen alarm at your chosen reminder time (<span id="icsReminderTimeText" class="font-bold text-emerald-800">08:00 AM</span>).
+          </p>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button id="downloadIcsAllBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
+              <span>📅 Download .ics Alarm File (All Events)</span>
+            </button>
+            <button id="installPwaPromptBtn" type="button" class="hidden px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
+              <span>📲 Install App Now</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Hosting + Mobile Install -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🍎</span>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Install on iPhone / iPad (iOS)</h4>
+            </div>
+            <ol class="text-xs text-slate-600 space-y-1.5 list-decimal list-inside">
+              <li>Open your deployed app link in <b>Safari</b> on iOS.</li>
+              <li>Tap the <b>Share</b> button (square with arrow pointing up) at the bottom bar.</li>
+              <li>Scroll down and tap <b>"Add to Home Screen"</b>, then tap <b>Add</b>.</li>
+              <li>Launch <b>OARA Calendar</b> from your Home Screen like a native iOS app!</li>
+            </ol>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">🤖</span>
+              <h4 class="text-xs sm:text-sm font-bold text-slate-900">Install on Android</h4>
+            </div>
+            <ol class="text-xs text-slate-600 space-y-1.5 list-decimal list-inside">
+              <li>Open your deployed app link in <b>Chrome</b> on Android.</li>
+              <li>Tap the <b>Install App</b> banner or the <b>⋮ (three dots)</b> menu in the top-right corner.</li>
+              <li>Tap <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
+              <li>Allow notifications when prompted for live reminder alerts!</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- 30-Second Free Deployment Guide -->
+        <div class="p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2">
+          <h4 class="text-xs sm:text-sm font-bold text-indigo-950">🚀 Deploy Free in 30 Seconds (No Server Required)</h4>
+          <p class="text-xs text-indigo-900/80 leading-relaxed">
+            Download the <b>Ready-to-Deploy PWA Package (.zip)</b> attached in chat, then drag-and-drop the unzipped folder onto <b>app.netlify.com/drop</b> (or push to GitHub Pages / Vercel / Cloudflare Pages). You will immediately get an <code>https://...</code> link that works on both iOS and Android!
+          </p>
+        </div>
+      </div>
+
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-end">
+        <button id="doneMobileDeployModalBtn" type="button" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold transition">
+          Got It
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script>
+    // ============================================================================
+    // 1. COMPLETE PRE-LOADED OARA SOCIAL CALENDAR DATASET (All 12 Months from PDF)
+    // ============================================================================
+    const MONTH_NAMES = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    const MONTH_SHORT = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+
+    const INITIAL_OARA_EVENTS = [
+      // JANUARY (10)
+      { id: 'oara-001', month: 1, day: 2, type: 'BIRTHDAY', name: 'Jithin Raj', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-002', month: 1, day: 12, type: 'BIRTHDAY', name: 'Mirah Nandu', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-003', month: 1, day: 17, type: 'BIRTHDAY', name: 'Sidharth Dev', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-004', month: 1, day: 17, type: 'ANNIVERSARY', name: 'Shithu & Sijo', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-005', month: 1, day: 18, type: 'ANNIVERSARY', name: 'Shery & George', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-006', month: 1, day: 20, type: 'BIRTHDAY', name: 'N Soman', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-007', month: 1, day: 20, type: 'BIRTHDAY', name: 'Jerin S', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-008', month: 1, day: 21, type: 'ANNIVERSARY', name: 'Akshaya', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-009', month: 1, day: 22, type: 'BIRTHDAY', name: 'Mridhul Raj', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-010', month: 1, day: 28, type: 'ANNIVERSARY', name: 'Ram & Neethu', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // FEBRUARY (9)
+      { id: 'oara-011', month: 2, day: 2, type: 'ANNIVERSARY', name: 'Nandu & Sethulakshmi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-012', month: 2, day: 7, type: 'BIRTHDAY', name: 'Nanika Ram', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-013', month: 2, day: 9, type: 'BIRTHDAY', name: 'Midhun Raj', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-014', month: 2, day: 9, type: 'ANNIVERSARY', name: 'Shijoy & Rentu', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-015', month: 2, day: 13, type: 'BIRTHDAY', name: 'Xavier', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-016', month: 2, day: 16, type: 'BIRTHDAY', name: 'Shiji Krishna Kumar', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-017', month: 2, day: 22, type: 'BIRTHDAY', name: 'Smrithi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-018', month: 2, day: 24, type: 'BIRTHDAY', name: 'Rigvedha', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-019', month: 2, day: 25, type: 'ANNIVERSARY', name: 'Soman & Kochuthresia', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // MARCH (6)
+      { id: 'oara-020', month: 3, day: 3, type: 'BIRTHDAY', name: 'Athul Krishna', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-021', month: 3, day: 15, type: 'BIRTHDAY', name: 'Susmitha Mary', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-022', month: 3, day: 17, type: 'BIRTHDAY', name: 'Dixy', customTime: '', reminderEnabled: true, phone: '', notes: 'Listed in March table (printed as 17-May in PDF)' },
+      { id: 'oara-023', month: 3, day: 18, type: 'BIRTHDAY', name: 'Shreya Krishna', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-024', month: 3, day: 21, type: 'ANNIVERSARY', name: 'Midhun & Athira', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-025', month: 3, day: 22, type: 'BIRTHDAY', name: 'Antony', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // APRIL (8)
+      { id: 'oara-026', month: 4, day: 8, type: 'ANNIVERSARY', name: 'Susmita Marry', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-027', month: 4, day: 10, type: 'ANNIVERSARY', name: 'Yamuna & Sudhakaran', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-028', month: 4, day: 12, type: 'BIRTHDAY', name: 'David', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-029', month: 4, day: 16, type: 'BIRTHDAY', name: 'Yamuna', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-030', month: 4, day: 24, type: 'ANNIVERSARY', name: 'Francis & Angel', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-031', month: 4, day: 24, type: 'ANNIVERSARY', name: 'Vishnu & Aishwarya', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-032', month: 4, day: 24, type: 'BIRTHDAY', name: 'Antony Missan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-033', month: 4, day: 29, type: 'ANNIVERSARY', name: 'Philomina & Xavier', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // MAY (19)
+      { id: 'oara-034', month: 5, day: 2, type: 'BIRTHDAY', name: 'Sethulakshmi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-035', month: 5, day: 4, type: 'BIRTHDAY', name: 'Shery T S', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-036', month: 5, day: 6, type: 'ANNIVERSARY', name: 'Bijal & Reshma', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-037', month: 5, day: 6, type: 'BIRTHDAY', name: 'Gladwin Missan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-038', month: 5, day: 7, type: 'BIRTHDAY', name: 'Dhyan Bijial', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-039', month: 5, day: 7, type: 'BIRTHDAY', name: 'Anand', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-040', month: 5, day: 7, type: 'BIRTHDAY', name: 'Rintu Shijoy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-041', month: 5, day: 8, type: 'ANNIVERSARY', name: 'Sidharth & Anamika', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-042', month: 5, day: 9, type: 'BIRTHDAY', name: 'Athul Prakash', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-043', month: 5, day: 10, type: 'ANNIVERSARY', name: 'Jithin & Rabna', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-044', month: 5, day: 10, type: 'BIRTHDAY', name: 'Anitha', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-045', month: 5, day: 11, type: 'BIRTHDAY', name: 'Izan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-046', month: 5, day: 22, type: 'BIRTHDAY', name: 'Girija Kumari', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-047', month: 5, day: 23, type: 'ANNIVERSARY', name: 'Krishna Kumar & Shiji', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-048', month: 5, day: 25, type: 'ANNIVERSARY', name: 'Smrith & Mridul', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-049', month: 5, day: 25, type: 'BIRTHDAY', name: 'Angel Francis', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-050', month: 5, day: 29, type: 'BIRTHDAY', name: 'Francis', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-051', month: 5, day: 29, type: 'BIRTHDAY', name: 'Usha Devi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-052', month: 5, day: 30, type: 'BIRTHDAY', name: 'Asha Kumar', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // JUNE (9)
+      { id: 'oara-053', month: 6, day: 1, type: 'BIRTHDAY', name: 'Reena', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-054', month: 6, day: 9, type: 'BIRTHDAY', name: 'Bryta', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-055', month: 6, day: 9, type: 'BIRTHDAY', name: 'Akhil', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-056', month: 6, day: 10, type: 'BIRTHDAY', name: 'Clint Joy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-057', month: 6, day: 11, type: 'BIRTHDAY', name: 'Nandu B Nair', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-058', month: 6, day: 14, type: 'BIRTHDAY', name: 'Helen Mariea', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-059', month: 6, day: 26, type: 'BIRTHDAY', name: 'Bijal Kumar', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-060', month: 6, day: 26, type: 'ANNIVERSARY', name: 'Antony & Reena', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-061', month: 6, day: 29, type: 'BIRTHDAY', name: 'Jes', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // JULY (6)
+      { id: 'oara-062', month: 7, day: 2, type: 'BIRTHDAY', name: 'Chrysa Mariam', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-063', month: 7, day: 4, type: 'BIRTHDAY', name: 'Neethu', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-064', month: 7, day: 17, type: 'BIRTHDAY', name: 'Aishwarya', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-065', month: 7, day: 22, type: 'BIRTHDAY', name: 'Kochuthresia', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-066', month: 7, day: 22, type: 'BIRTHDAY', name: 'Galwin Missan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-067', month: 7, day: 28, type: 'BIRTHDAY', name: 'Rema Devi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // AUGUST (7)
+      { id: 'oara-068', month: 8, day: 1, type: 'BIRTHDAY', name: 'Brita', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-069', month: 8, day: 4, type: 'BIRTHDAY', name: 'Akshaya Prakash', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-070', month: 8, day: 6, type: 'BIRTHDAY', name: 'Vishnu B Nair', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-071', month: 8, day: 10, type: 'BIRTHDAY', name: 'Krishna Kumar', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-072', month: 8, day: 17, type: 'BIRTHDAY', name: 'Sanal', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-073', month: 8, day: 27, type: 'BIRTHDAY', name: 'Anamika Varghese', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-074', month: 8, day: 31, type: 'BIRTHDAY', name: 'Athira', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // SEPTEMBER (11)
+      { id: 'oara-075', month: 9, day: 9, type: 'BIRTHDAY', name: 'Ridhav Ram', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-076', month: 9, day: 10, type: 'BIRTHDAY', name: 'Anju', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-077', month: 9, day: 10, type: 'BIRTHDAY', name: 'ILAN', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-078', month: 9, day: 11, type: 'ANNIVERSARY', name: 'Balachandran & Girija', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-079', month: 9, day: 11, type: 'ANNIVERSARY', name: 'Prakash & Anitha', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-080', month: 9, day: 11, type: 'ANNIVERSARY', name: 'David & Dixy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-081', month: 9, day: 13, type: 'BIRTHDAY', name: 'Kane Joy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-082', month: 9, day: 15, type: 'BIRTHDAY', name: 'Philomina', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-083', month: 9, day: 22, type: 'BIRTHDAY', name: 'Yuvaan Midhun', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-084', month: 9, day: 27, type: 'ANNIVERSARY', name: 'Clint & Dona', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-085', month: 9, day: 30, type: 'BIRTHDAY', name: 'Annrona', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // OCTOBER (4)
+      { id: 'oara-086', month: 10, day: 3, type: 'BIRTHDAY', name: 'Reshma Mohan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-087', month: 10, day: 4, type: 'BIRTHDAY', name: 'Dona Joy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-088', month: 10, day: 12, type: 'BIRTHDAY', name: 'Aaron Jes', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-089', month: 10, day: 25, type: 'BIRTHDAY', name: 'Godwin Missan', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // NOVEMBER (12)
+      { id: 'oara-090', month: 11, day: 1, type: 'ANNIVERSARY', name: 'Ashakumar & Remadevi', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-091', month: 11, day: 3, type: 'BIRTHDAY', name: 'Shithu', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-092', month: 11, day: 11, type: 'BIRTHDAY', name: 'Ram Kumar', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-093', month: 11, day: 11, type: 'BIRTHDAY', name: 'Anu Jes', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-094', month: 11, day: 17, type: 'BIRTHDAY', name: 'Anna', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-095', month: 11, day: 18, type: 'BIRTHDAY', name: 'Balachandran Nair', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-096', month: 11, day: 19, type: 'BIRTHDAY', name: 'Rabna Jithin', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-097', month: 11, day: 20, type: 'ANNIVERSARY', name: 'Akhil & Tency', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-098', month: 11, day: 20, type: 'BIRTHDAY', name: 'Siju Joseph', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-099', month: 11, day: 22, type: 'BIRTHDAY', name: 'Shijoy Thomas', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-100', month: 11, day: 27, type: 'BIRTHDAY', name: 'Sudhakaran', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-101', month: 11, day: 27, type: 'ANNIVERSARY', name: 'Sanal & Anju', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+
+      // DECEMBER (4)
+      { id: 'oara-102', month: 12, day: 14, type: 'BIRTHDAY', name: 'Bhanu Bijal', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-103', month: 12, day: 17, type: 'BIRTHDAY', name: 'Merina Roy', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-104', month: 12, day: 20, type: 'BIRTHDAY', name: 'Shyni', customTime: '', reminderEnabled: true, phone: '', notes: '' },
+      { id: 'oara-105', month: 12, day: 26, type: 'ANNIVERSARY', name: 'Jes & Anu', customTime: '', reminderEnabled: true, phone: '', notes: '' }
+    ];
+
+    // ============================================================================
+    // 2. STATE & STORAGE MANAGEMENT
+    // ============================================================================
+    const STORAGE_KEY_EVENTS = 'oara_social_calendar_events_v1';
+    const STORAGE_KEY_SETTINGS = 'oara_social_calendar_settings_v1';
+    const STORAGE_KEY_FIRED = 'oara_social_calendar_fired_log_v1';
+
+    const nowInit = new Date();
+    let appState = {
+      events: [],
+      selectedMonth: nowInit.getMonth() + 1, // 1..12
+      viewMode: 'monthly', // 'monthly' | 'all' | 'upcoming'
+      searchQuery: '',
+      typeFilter: 'ALL', // 'ALL' | 'BIRTHDAY' | 'ANNIVERSARY'
+      previewDateStr: formatDateISO(nowInit),
+      settings: {
+        masterEnabled: true,
+        defaultTime: '08:00',
+        advanceOption: 'same_day', // 'same_day' | 'both' | 'day_before'
+        soundEnabled: true,
+        groupInviteUrl: ''
+      },
+      firedLog: {}, // key: "YYYY-MM-DD_eventId_HH:MM" -> true
+      activeWishesEventId: null,
+      confirmCallback: null
+    };
+
+    function formatDateISO(d) {
+      const yr = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, '0');
+      const da = String(d.getDate()).padStart(2, '0');
+      return `${yr}-${mo}-${da}`;
+    }
+
+    function formatShortDate(month, day) {
+      return `${String(day).padStart(2, '0')}-${MONTH_SHORT[month - 1]}`;
+    }
+
+    function formatTime12h(time24) {
+      if (!time24 || !time24.includes(':')) return '08:00 AM';
+      const [hStr, mStr] = time24.split(':');
+      let h = parseInt(hStr, 10);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${String(h).padStart(2, '0')}:${mStr} ${ampm}`;
+    }
+
+    function loadFromStorage() {
+      try {
+        const rawEvents = localStorage.getItem(STORAGE_KEY_EVENTS);
+        if (rawEvents) {
+          const parsed = JSON.parse(rawEvents);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            appState.events = parsed;
+          } else {
+            appState.events = JSON.parse(JSON.stringify(INITIAL_OARA_EVENTS));
+          }
+        } else {
+          appState.events = JSON.parse(JSON.stringify(INITIAL_OARA_EVENTS));
+        }
+
+        const rawSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
+        if (rawSettings) {
+          const parsedSettings = JSON.parse(rawSettings);
+          appState.settings = Object.assign({}, appState.settings, parsedSettings);
+        }
+
+        const rawFired = localStorage.getItem(STORAGE_KEY_FIRED);
+        if (rawFired) {
+          appState.firedLog = JSON.parse(rawFired) || {};
+        }
+      } catch (e) {
+        appState.events = JSON.parse(JSON.stringify(INITIAL_OARA_EVENTS));
+      }
+      sortEvents();
+    }
+
+    function saveEventsToStorage() {
+      sortEvents();
+      try {
+        localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(appState.events));
+      } catch (e) {
+        // Fallback if storage quota or sandbox blocks
+      }
+    }
+
+    function saveSettingsToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(appState.settings));
+      } catch (e) {}
+    }
+
+    function saveFiredLog() {
+      try {
+        localStorage.setItem(STORAGE_KEY_FIRED, JSON.stringify(appState.firedLog));
+      } catch (e) {}
+    }
+
+    function sortEvents() {
+      appState.events.sort((a, b) => {
+        if (a.month !== b.month) return a.month - b.month;
+        if (a.day !== b.day) return a.day - b.day;
+        return a.name.localeCompare(b.name);
+      });
+    }
+
+    // ============================================================================
+    // 3. SYNTHESIZED WEB AUDIO CHIME (No external MP3 required)
+    // ============================================================================
+    function playCelebrationChime() {
+      if (!appState.settings.soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.13);
+          gain.gain.setValueAtTime(0.001, ctx.currentTime + idx * 0.13);
+          gain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + idx * 0.13 + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.13 + 0.55);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.13);
+          osc.stop(ctx.currentTime + idx * 0.13 + 0.56);
+        });
+      } catch (e) {}
+    }
+
+    // ============================================================================
+    // 4. DATE & UPCOMING CALCULATIONS
+    // ============================================================================
+    function getDaysUntilEvent(month, day, refDateObj) {
+      const ref = new Date(refDateObj.getFullYear(), refDateObj.getMonth(), refDateObj.getDate());
+      let target = new Date(ref.getFullYear(), month - 1, day);
+      if (target < ref) {
+        target = new Date(ref.getFullYear() + 1, month - 1, day);
+      }
+      const diffMs = target.getTime() - ref.getTime();
+      return Math.round(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    function parsePreviewDate() {
+      if (!appState.previewDateStr) return new Date();
+      const [y, m, d] = appState.previewDateStr.split('-').map(Number);
+      if (!y || !m || !d) return new Date();
+      return new Date(y, m - 1, d);
+    }
+
+    // ============================================================================
+    // 5. WHATSAPP MESSAGE GENERATOR (Bilingual, English, Malayalam, Combined)
+    // ============================================================================
+    function buildWhatsAppMessage(eventObj, style, combineSameDay) {
+      if (!eventObj) return '';
+      const dateStr = `${String(eventObj.day).padStart(2, '0')} ${MONTH_NAMES[eventObj.month - 1]}`;
+      const sameDayEvents = combineSameDay
+        ? appState.events.filter(e => e.month === eventObj.month && e.day === eventObj.day)
+        : [eventObj];
+
+      if (sameDayEvents.length > 1) {
+        const bdays = sameDayEvents.filter(e => e.type === 'BIRTHDAY');
+        const annivs = sameDayEvents.filter(e => e.type === 'ANNIVERSARY');
+
+        let lines = [];
+        lines.push(`🌸 *ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)* 🌸`);
+        lines.push(`*ORCHID AVENUE RESIDENTS ASSOCIATION*`);
+        lines.push(`📅 *${dateStr} — Today's Celebrations!* ✨\n`);
+
+        if (bdays.length > 0) {
+          lines.push(`🎂 *Happy Birthday Wishes To:*`);
+          bdays.forEach(b => lines.push(`   🌟 *${b.name}*`));
+          lines.push(`ജന്മദിനാശംസകൾ! Wishing you good health, happiness, and a wonderful year ahead!\n`);
+        }
+        if (annivs.length > 0) {
+          lines.push(`💍 *Happy Wedding Anniversary Wishes To:*`);
+          annivs.forEach(a => lines.push(`   💖 *${a.name}*`));
+          lines.push(`വിവാഹ വാർഷികാശംസകൾ! Wishing you many more years of love, togetherness, and joy!\n`);
+        }
+        lines.push(`Warm regards,\n*OARA Family* 🏡💐`);
+        return lines.join('\n');
+      }
+
+      const isBday = eventObj.type === 'BIRTHDAY';
+
+      if (style === 'oara_bilingual') {
+        if (isBday) {
+          return `🎂 *HAPPY BIRTHDAY WISHES!* 🎉\n🌸 *ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)* 🌸\n\nDear *${eventObj.name}*,\n\nWishing you a very Happy Birthday (${dateStr}) filled with joy, good health, and prosperity! 🥳✨\n\nസ്നേഹം നിറഞ്ഞ ജന്മദിനാശംസകൾ! ആയുരാരോഗ്യ സൗഖ്യങ്ങൾ നേരുന്നു. 💐🎂\n\nWarmest wishes from all of us,\n*OARA Family (Orchid Avenue Residents Association)* 🏡`;
+        } else {
+          return `💍 *HAPPY ANNIVERSARY WISHES!* 💖\n🌸 *ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)* 🌸\n\nDear *${eventObj.name}*,\n\nWishing you both a very Happy Wedding Anniversary (${dateStr})! May your bond continue to grow stronger with each passing year. 🥂✨\n\nഹൃദയം നിറഞ്ഞ വിവാഹ വാർഷികാശംസകൾ! സന്തോഷവും സമാധാനവും എന്നും നിറഞ്ഞുനിൽക്കട്ടെ. 💐💞\n\nWarmest wishes from all of us,\n*OARA Family (Orchid Avenue Residents Association)* 🏡`;
+        }
+      }
+
+      if (style === 'oara_english') {
+        if (isBday) {
+          return `🎂 *Warm Birthday Wishes from OARA!* 🎈\n\nDear *${eventObj.name}*,\n\nWishing you a wonderful Birthday today (${dateStr})! May the year ahead bring you happiness, good health, and great memories with family and friends. 🌟🥳\n\nBest wishes,\n*Orchid Avenue Residents Association (OARA)* 🏡💐`;
+        } else {
+          return `💍 *Warm Anniversary Wishes from OARA!* 🥂\n\nDear *${eventObj.name}*,\n\nHeartiest congratulations on your Wedding Anniversary today (${dateStr})! Wishing you both endless love, laughter, and happiness together. 💖✨\n\nBest wishes,\n*Orchid Avenue Residents Association (OARA)* 🏡💐`;
+        }
+      }
+
+      if (style === 'oara_malayalam') {
+        if (isBday) {
+          return `🌸 *ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)* 🌸\n\nപ്രിയ *${eventObj.name}*,\n\nഹൃദയം നിറഞ്ഞ ജന്മദിനാശംസകൾ! 🎂🎉 (${dateStr})\nജീവിതത്തിൽ എന്നും സന്തോഷവും സമാധാനവും ആയുരാരോഗ്യവും ഉണ്ടാകട്ടെ എന്ന് ആശംസിക്കുന്നു. 💐✨\n\nസ്നേഹത്തോടെ,\n*OARA കുടുംബാംഗങ്ങൾ* 🏡`;
+        } else {
+          return `🌸 *ഓർക്കിഡ് അവന്യൂ റസിഡന്റ്സ് അസ്സോസിയേഷൻ (OARA)* 🌸\n\nപ്രിയ *${eventObj.name}*,\n\nഹൃദയം നിറഞ്ഞ വിവാഹ വാർഷികാശംസകൾ! 💍💖 (${dateStr})\nഒത്തൊരുമയോടെയും സന്തോഷത്തോടെയും ഇനിയും ഒരുപാട് വർഷങ്ങൾ ഒരുമിച്ച് ആഘോഷിക്കാൻ സാധിക്കട്ടെ എന്ന് ആശംസിക്കുന്നു. 💐✨\n\nസ്നേഹത്തോടെ,\n*OARA കുടുംബാംഗങ്ങൾ* 🏡`;
+        }
+      }
+
+      // Short & Festive
+      if (isBday) {
+        return `🎂✨ *Happy Birthday ${eventObj.name}!* 🥳🎈\nWishing you a fantastic year ahead! ജന്മദിനാശംസകൾ!\n— *OARA Family* 🏡💐`;
+      } else {
+        return `💍✨ *Happy Anniversary ${eventObj.name}!* 💖🥂\nWishing you both a lifetime of love & happiness! വിവാഹ വാർഷികാശംസകൾ!\n— *OARA Family* 🏡💐`;
+      }
+    }
+
+    // ============================================================================
+    // 6. UI RENDERING FUNCTIONS
+    // ============================================================================
+    function renderAll() {
+      renderStatsAndHeader();
+      renderSpotlight();
+      renderMonthTabs();
+      renderEventsView();
+    }
+
+    function renderStatsAndHeader() {
+      const total = appState.events.length;
+      const bdays = appState.events.filter(e => e.type === 'BIRTHDAY').length;
+      const annivs = appState.events.filter(e => e.type === 'ANNIVERSARY').length;
+      const activeCount = appState.events.filter(e => e.reminderEnabled !== false).length;
+
+      document.getElementById('statTotalEvents').textContent = String(total);
+      document.getElementById('statBreakdownText').textContent = `${bdays} Birthdays • ${annivs} Anniversaries`;
+      document.getElementById('statActiveReminders').textContent = appState.settings.masterEnabled ? String(activeCount) : 'Paused';
+      document.getElementById('statReminderTimeSub').textContent = appState.settings.masterEnabled
+        ? `Default at ${formatTime12h(appState.settings.defaultTime)}`
+        : 'Master reminder paused';
+
+      document.getElementById('quickDefaultTimeInput').value = appState.settings.defaultTime;
+      document.getElementById('modalDefaultTimeHint').textContent = formatTime12h(appState.settings.defaultTime);
+
+      const dot = document.getElementById('reminderStatusDot');
+      if (appState.settings.masterEnabled) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-slate-400';
+      }
+
+      // Upcoming 30 days count
+      const refDate = parsePreviewDate();
+      const upcoming30 = appState.events.filter(e => getDaysUntilEvent(e.month, e.day, refDate) <= 30);
+      document.getElementById('upcoming30CountBadge').textContent = String(upcoming30.length);
+
+      // Next scheduled reminder summary
+      const sortedUpcoming = [...appState.events]
+        .filter(e => e.reminderEnabled !== false)
+        .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+        .sort((a, b) => a.daysLeft - b.daysLeft);
+
+      const nextEl = document.getElementById('nextReminderSummaryText');
+      if (!appState.settings.masterEnabled) {
+        nextEl.textContent = 'Reminders are currently paused in settings.';
+      } else if (sortedUpcoming.length > 0) {
+        const nextEv = sortedUpcoming[0];
+        const remTime = formatTime12h(nextEv.customTime || appState.settings.defaultTime);
+        const dayText = nextEv.daysLeft === 0
+          ? 'Today'
+          : nextEv.daysLeft === 1
+          ? 'Tomorrow'
+          : `In ${nextEv.daysLeft} days (${formatShortDate(nextEv.month, nextEv.day)})`;
+        nextEl.textContent = `Next: ${nextEv.name} (${nextEv.type === 'BIRTHDAY' ? '🎂' : '💍'}) — ${dayText} at ${remTime}`;
+      } else {
+        nextEl.textContent = 'No active reminders scheduled.';
+      }
+    }
+
+    function renderSpotlight() {
+      const refDate = parsePreviewDate();
+      const todayISO = formatDateISO(new Date());
+      const isToday = appState.previewDateStr === todayISO;
+      const dateLabel = document.getElementById('selectedDateLabel');
+      dateLabel.textContent = isToday
+        ? `Today (${formatShortDate(refDate.getMonth() + 1, refDate.getDate())})`
+        : `Selected: ${formatShortDate(refDate.getMonth() + 1, refDate.getDate())}`;
+
+      const withDays = appState.events
+        .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+        .sort((a, b) => a.daysLeft - b.daysLeft || a.name.localeCompare(b.name));
+
+      const exactToday = withDays.filter(e => e.daysLeft === 0);
+      const nextFew = withDays.filter(e => e.daysLeft > 0).slice(0, 6);
+      const displayList = [...exactToday, ...nextFew].slice(0, 6);
+
+      const container = document.getElementById('spotlightContainer');
+      if (displayList.length === 0) {
+        container.innerHTML = `<div class="col-span-2 text-xs text-slate-400 py-6 text-center">No events found. Add an event to get started!</div>`;
+        return;
+      }
+
+      container.innerHTML = displayList.map(ev => {
+        const isNow = ev.daysLeft === 0;
+        const isTomorrow = ev.daysLeft === 1;
+        const badgeClass = isNow
+          ? 'bg-amber-500 text-white animate-pulse-soft'
+          : isTomorrow
+          ? 'bg-indigo-600 text-white'
+          : 'bg-slate-100 text-slate-700';
+        const badgeText = isNow
+          ? '🎉 TODAY!'
+          : isTomorrow
+          ? 'Tomorrow'
+          : `In ${ev.daysLeft}d • ${formatShortDate(ev.month, ev.day)}`;
+        const typeIcon = ev.type === 'BIRTHDAY' ? '🎂' : '💍';
+        const typePill = ev.type === 'BIRTHDAY'
+          ? 'bg-sky-50 text-sky-700 border-sky-200'
+          : 'bg-rose-50 text-rose-700 border-rose-200';
+        const effectiveTime = formatTime12h(ev.customTime || appState.settings.defaultTime);
+
+        return `
+          <div class="p-3 rounded-xl border ${isNow ? 'border-amber-300 bg-amber-50/50' : 'border-slate-200 bg-slate-50/60'} flex flex-col justify-between gap-2">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-sm">${typeIcon}</span>
+                  <span class="font-bold text-xs sm:text-sm text-slate-900 truncate">${escapeHtml(ev.name)}</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-1.5 mt-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-md border ${typePill}">${ev.type}</span>
+                  <span class="text-[11px] text-slate-500 flex items-center gap-0.5">🔔 ${effectiveTime}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full shrink-0 ${badgeClass}">${badgeText}</span>
+            </div>
+            <div class="flex items-center justify-end gap-1.5 pt-1 border-t border-slate-200/60">
+              <button type="button" data-action="edit" data-id="${ev.id}" class="px-2 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 text-[11px] font-semibold transition">
+                ✏️ Alter / Time
+              </button>
+              <button type="button" data-action="wish" data-id="${ev.id}" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold flex items-center gap-1 transition">
+                <span>💬 Send Wish</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMonthTabs() {
+      const bar = document.getElementById('monthTabsBar');
+      if (appState.viewMode !== 'monthly') {
+        bar.classList.add('hidden');
+        return;
+      }
+      bar.classList.remove('hidden');
+
+      bar.innerHTML = MONTH_NAMES.map((mName, idx) => {
+        const mNum = idx + 1;
+        const count = appState.events.filter(e => e.month === mNum).length;
+        const isSelected = appState.selectedMonth === mNum;
+        return `
+          <button type="button" data-month="${mNum}" class="month-tab-btn px-2.5 py-2 rounded-xl border text-left transition flex flex-col justify-between ${
+            isSelected
+              ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+              : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+          }">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-xs font-extrabold">${MONTH_SHORT[idx].toUpperCase()}</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
+                isSelected ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+              }">${count}</span>
+            </div>
+            <span class="text-[10px] ${isSelected ? 'text-indigo-100' : 'text-slate-400'} truncate mt-0.5">${mName}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function filterEventsList() {
+      const q = appState.searchQuery.trim().toLowerCase();
+      const refDate = parsePreviewDate();
+
+      return appState.events.filter(ev => {
+        if (appState.typeFilter !== 'ALL' && ev.type !== appState.typeFilter) return false;
+        if (q) {
+          const dateCode = formatShortDate(ev.month, ev.day).toLowerCase();
+          const mFull = MONTH_NAMES[ev.month - 1].toLowerCase();
+          const hay = `${ev.name} ${dateCode} ${mFull} ${ev.type} ${ev.notes || ''}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        if (appState.viewMode === 'monthly' && !q) {
+          return ev.month === appState.selectedMonth;
+        }
+        if (appState.viewMode === 'upcoming') {
+          const dLeft = getDaysUntilEvent(ev.month, ev.day, refDate);
+          return dLeft <= 30;
+        }
+        return true;
+      });
+    }
+
+    function renderEventsView() {
+      const container = document.getElementById('eventsDisplaySection');
+      const filtered = filterEventsList();
+      const refDate = parsePreviewDate();
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl border border-slate-200 p-10 text-center space-y-3">
+            <div class="text-3xl">🔍</div>
+            <h3 class="text-base font-bold text-slate-800">No Matching Celebrations Found</h3>
+            <p class="text-xs text-slate-500 max-w-md mx-auto">Try clearing your search filter or click "Add Event" to add a new Birthday or Anniversary to the OARA Social Calendar.</p>
+            <button type="button" id="emptyStateAddBtn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold">+ Add New Event</button>
+          </div>
+        `;
+        const btn = document.getElementById('emptyStateAddBtn');
+        if (btn) btn.addEventListener('click', () => openEventModal(null, appState.selectedMonth));
+        return;
+      }
+
+      if (appState.viewMode === 'upcoming') {
+        const sortedUpcoming = [...filtered]
+          .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+        container.innerHTML = renderMonthTableCard(
+          '⏳ Upcoming Celebrations (Next 30 Days)',
+          'Sorted chronologically from your selected reference date',
+          sortedUpcoming,
+          null,
+          true
+        );
+        return;
+      }
+
+      if (appState.viewMode === 'monthly' && !appState.searchQuery.trim()) {
+        const mNum = appState.selectedMonth;
+        const mName = MONTH_NAMES[mNum - 1].toUpperCase();
+        container.innerHTML = renderMonthTableCard(
+          mName,
+          `${filtered.length} celebrations recorded in ${MONTH_NAMES[mNum - 1]}`,
+          filtered,
+          mNum,
+          false
+        );
+        return;
+      }
+
+      // All 12 Months or Search Results grouped by month
+      const groupedHtml = [];
+      for (let m = 1; m <= 12; m++) {
+        const mEvents = filtered.filter(e => e.month === m);
+        if (mEvents.length > 0) {
+          groupedHtml.push(
+            renderMonthTableCard(
+              MONTH_NAMES[m - 1].toUpperCase(),
+              `${mEvents.length} celebrations in ${MONTH_NAMES[m - 1]}`,
+              mEvents,
+              m,
+              false
+            )
+          );
+        }
+      }
+      container.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">${groupedHtml.join('')}</div>`;
+    }
+
+    function renderMonthTableCard(title, subtitle, eventsList, monthNumForAdd, showDaysLeft) {
+      const refDate = parsePreviewDate();
+
+      const rowsHtml = eventsList.map(ev => {
+        const isBday = ev.type === 'BIRTHDAY';
+        const rowBg = isBday
+          ? 'bg-sky-50/55 hover:bg-sky-100/60'
+          : 'bg-rose-50/65 hover:bg-rose-100/60';
+        const badgeStyle = isBday
+          ? 'bg-sky-100 text-sky-800 border-sky-300'
+          : 'bg-rose-100 text-rose-800 border-rose-300';
+        const icon = isBday ? '🎂' : '💍';
+        const dateCode = formatShortDate(ev.month, ev.day);
+        const daysLeft = getDaysUntilEvent(ev.month, ev.day, refDate);
+        const remTime = ev.customTime || appState.settings.defaultTime;
+        const isCustom = Boolean(ev.customTime);
+        const isEnabled = ev.reminderEnabled !== false;
+
+        return `
+          <tr class="${rowBg} border-b border-slate-200/80 transition">
+            <td class="px-3.5 py-2.5 whitespace-nowrap">
+              <div class="font-bold text-xs sm:text-sm text-slate-900">${dateCode}</div>
+              ${
+                showDaysLeft || daysLeft <= 7
+                  ? `<span class="inline-block text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                      daysLeft === 0
+                        ? 'bg-amber-500 text-white'
+                        : 'bg-indigo-100 text-indigo-800'
+                    }">${daysLeft === 0 ? 'TODAY!' : `in ${daysLeft}d`}</span>`
+                  : ''
+              }
+            </td>
+            <td class="px-3.5 py-2.5 whitespace-nowrap">
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border ${badgeStyle}">
+                <span>${icon}</span>
+                <span>${ev.type}</span>
+              </span>
+            </td>
+            <td class="px-3.5 py-2.5">
+              <div class="font-bold text-xs sm:text-sm text-slate-900">${escapeHtml(ev.name)}</div>
+              ${ev.notes ? `<div class="text-[11px] text-slate-500 mt-0.5">${escapeHtml(ev.notes)}</div>` : ''}
+            </td>
+            <td class="px-3.5 py-2.5 whitespace-nowrap">
+              <button type="button" data-action="edit" data-id="${ev.id}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold border transition ${
+                !isEnabled
+                  ? 'bg-slate-100 text-slate-400 border-slate-200 line-through'
+                  : isCustom
+                  ? 'bg-amber-50 text-amber-900 border-amber-300'
+                  : 'bg-white text-slate-700 border-slate-200 hover:border-indigo-300'
+              }" title="Click to change reminder time for ${escapeHtml(ev.name)}">
+                <span>${isEnabled ? '🔔' : '🔕'}</span>
+                <span>${formatTime12h(remTime)}</span>
+                ${isCustom ? '<span class="text-[9px] uppercase bg-amber-200/80 text-amber-900 px-1 rounded">Custom</span>' : ''}
+              </button>
+            </td>
+            <td class="px-3.5 py-2.5 whitespace-nowrap text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button type="button" data-action="wish" data-id="${ev.id}" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1 shadow-2xs transition" title="Send WhatsApp Group Wishes">
+                  <span>💬</span>
+                  <span class="hidden sm:inline">Wish</span>
+                </button>
+                <button type="button" data-action="edit" data-id="${ev.id}" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-semibold transition" title="Edit or Alter Event">
+                  ✏️
+                </button>
+                <button type="button" data-action="delete" data-id="${ev.id}" class="px-2 py-1.5 rounded-lg bg-white hover:bg-rose-50 text-rose-600 border border-slate-200 text-xs font-semibold transition" title="Delete Event">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="px-4 sm:px-5 py-3.5 bg-gradient-to-r from-indigo-700 via-blue-700 to-indigo-800 text-white flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold tracking-wide">${title}</h3>
+              <p class="text-[11px] text-indigo-100">${subtitle}</p>
+            </div>
+            ${
+              monthNumForAdd
+                ? `<button type="button" data-action="add-in-month" data-month="${monthNumForAdd}" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition">+ Add in ${MONTH_SHORT[monthNumForAdd - 1]}</button>`
+                : ''
+            }
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-100 text-slate-600 text-[11px] font-extrabold uppercase tracking-wider border-b border-slate-200">
+                  <th class="px-3.5 py-2.5">Date</th>
+                  <th class="px-3.5 py-2.5">Birthday / Anniversary</th>
+                  <th class="px-3.5 py-2.5">Name</th>
+                  <th class="px-3.5 py-2.5">Reminder Time</th>
+                  <th class="px-3.5 py-2.5 text-right">Actions &amp; WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // ============================================================================
+    // 7. MODALS & USER FLOWS (Add/Edit Event, Wishes Studio, Settings, Confirm)
+    // ============================================================================
+    function openEventModal(eventId, defaultMonth) {
+      const modal = document.getElementById('eventFormModal');
+      const deleteBtn = document.getElementById('deleteEventFromModalBtn');
+      const titleEl = document.getElementById('eventModalTitle');
+
+      if (eventId) {
+        const ev = appState.events.find(e => e.id === eventId);
+        if (!ev) return;
+        titleEl.textContent = `Edit Celebration: ${ev.name}`;
+        document.getElementById('eventIdInput').value = ev.id;
+        document.getElementById('eventNameInput').value = ev.name;
+        document.getElementById('eventTypeInput').value = ev.type;
+        document.getElementById('eventMonthInput').value = String(ev.month);
+        document.getElementById('eventDayInput').value = String(ev.day);
+        document.getElementById('eventCustomTimeInput').value = ev.customTime || '';
+        document.getElementById('eventReminderEnabledInput').checked = ev.reminderEnabled !== false;
+        document.getElementById('eventPhoneInput').value = ev.phone || '';
+        document.getElementById('eventNotesInput').value = ev.notes || '';
+        deleteBtn.classList.remove('hidden');
+      } else {
+        titleEl.textContent = 'Add New Celebration to OARA Calendar';
+        document.getElementById('eventIdInput').value = '';
+        document.getElementById('eventNameInput').value = '';
+        document.getElementById('eventTypeInput').value = 'BIRTHDAY';
+        document.getElementById('eventMonthInput').value = String(defaultMonth || appState.selectedMonth || 1);
+        document.getElementById('eventDayInput').value = '1';
+        document.getElementById('eventCustomTimeInput').value = '';
+        document.getElementById('eventReminderEnabledInput').checked = true;
+        document.getElementById('eventPhoneInput').value = '';
+        document.getElementById('eventNotesInput').value = '';
+        deleteBtn.classList.add('hidden');
+      }
+
+      modal.classList.remove('hidden');
+      document.getElementById('eventNameInput').focus();
+    }
+
+    function closeEventModal() {
+      document.getElementById('eventFormModal').classList.add('hidden');
+    }
+
+    function openWishesModal(eventId, forceCombineSameDay) {
+      const modal = document.getElementById('wishesModal');
+      const select = document.getElementById('wishesEventSelect');
+      const refDate = parsePreviewDate();
+
+      // Populate dropdown sorted by upcoming proximity
+      const sorted = [...appState.events]
+        .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+        .sort((a, b) => a.daysLeft - b.daysLeft || a.name.localeCompare(b.name));
+
+      select.innerHTML = sorted.map(e => {
+        const icon = e.type === 'BIRTHDAY' ? '🎂' : '💍';
+        const dTag = e.daysLeft === 0 ? ' [TODAY]' : ` (${formatShortDate(e.month, e.day)})`;
+        return `<option value="${e.id}">${icon} ${escapeHtml(e.name)} — ${e.type}${dTag}</option>`;
+      }).join('');
+
+      let targetId = eventId;
+      if (!targetId && sorted.length > 0) {
+        targetId = sorted[0].id;
+      }
+      appState.activeWishesEventId = targetId;
+      select.value = targetId;
+
+      const ev = appState.events.find(e => e.id === targetId);
+      const sameDayCount = ev
+        ? appState.events.filter(x => x.month === ev.month && x.day === ev.day).length
+        : 0;
+
+      const combineBox = document.getElementById('sameDayCombineBox');
+      const combineCheckbox = document.getElementById('combineSameDayCheckbox');
+      if (sameDayCount > 1 && ev) {
+        combineBox.classList.remove('hidden');
+        document.getElementById('sameDayDateLabel').textContent = formatShortDate(ev.month, ev.day);
+        combineCheckbox.checked = Boolean(forceCombineSameDay);
+      } else {
+        combineBox.classList.add('hidden');
+        combineCheckbox.checked = false;
+      }
+
+      document.getElementById('savedGroupInviteInput').value = appState.settings.groupInviteUrl || '';
+      document.getElementById('directPhoneOverrideInput').value = (ev && ev.phone) ? ev.phone : '';
+      updateGroupInviteButtonVisibility();
+      refreshWishesTextarea();
+      modal.classList.remove('hidden');
+    }
+
+    function refreshWishesTextarea() {
+      const evId = document.getElementById('wishesEventSelect').value;
+      appState.activeWishesEventId = evId;
+      const ev = appState.events.find(e => e.id === evId);
+      const style = document.getElementById('wishesTemplateStyleSelect').value;
+      const combine = document.getElementById('combineSameDayCheckbox').checked;
+      document.getElementById('wishesMessageTextarea').value = buildWhatsAppMessage(ev, style, combine);
+    }
+
+    function updateGroupInviteButtonVisibility() {
+      const linkBtn = document.getElementById('openGroupInviteBtn');
+      if (appState.settings.groupInviteUrl && appState.settings.groupInviteUrl.startsWith('http')) {
+        linkBtn.classList.remove('hidden');
+      } else {
+        linkBtn.classList.add('hidden');
+      }
+    }
+
+    function openConfirmModal(title, message, onConfirm) {
+      document.getElementById('confirmModalTitle').textContent = title;
+      document.getElementById('confirmModalMessage').textContent = message;
+      appState.confirmCallback = onConfirm;
+      document.getElementById('confirmModal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.add('hidden');
+      appState.confirmCallback = null;
+    }
+
+    function showToast(message, bgClass = 'bg-slate-900') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `${bgClass} text-white text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-white/10 pointer-events-auto transition-all duration-300`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+
+    // ============================================================================
+    // 8. LIVE REMINDER ENGINE & BROWSER NOTIFICATIONS
+    // ============================================================================
+    function triggerReminderAlert(eventsToAlert, subtitleLabel) {
+      if (!eventsToAlert || eventsToAlert.length === 0) return;
+      playCelebrationChime();
+
+      const names = eventsToAlert.map(e => `${e.name} (${e.type === 'BIRTHDAY' ? '🎂 Birthday' : '💍 Anniversary'})`).join(', ');
+      const banner = document.getElementById('activeReminderBanner');
+      document.getElementById('bannerAlertSubtitle').textContent = subtitleLabel || 'OARA Scheduled Celebration Reminder';
+      document.getElementById('bannerAlertTitle').textContent = `${names} — Send wishes to the OARA WhatsApp group!`;
+      banner.classList.remove('hidden');
+
+      appState.activeWishesEventId = eventsToAlert[0].id;
+
+      // Also fire system Browser Notification if granted
+      try {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('🎉 OARA Social Calendar Reminder', {
+            body: `${names}\nTap to send wishes to the OARA WhatsApp group!`
+          });
+        }
+      } catch (e) {}
+    }
+
+    function checkScheduledRemindersTick() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+      const clockBadge = document.getElementById('liveClockBadge');
+      if (clockBadge) {
+        clockBadge.textContent = `🕒 ${dateStr} • ${timeStr}`;
+      }
+
+      if (!appState.settings.masterEnabled) return;
+
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const currentHHMM = `${hh}:${mm}`;
+      const todayKeyPrefix = formatDateISO(now);
+
+      const triggeredEvents = [];
+
+      appState.events.forEach(ev => {
+        if (ev.reminderEnabled === false) return;
+        const targetHHMM = ev.customTime || appState.settings.defaultTime;
+        if (targetHHMM !== currentHHMM) return;
+
+        const daysUntil = getDaysUntilEvent(ev.month, ev.day, now);
+        const opt = appState.settings.advanceOption;
+        const matchSameDay = (opt === 'same_day' || opt === 'both') && daysUntil === 0;
+        const matchDayBefore = (opt === 'day_before' || opt === 'both') && daysUntil === 1;
+
+        if (matchSameDay || matchDayBefore) {
+          const logKey = `${todayKeyPrefix}_${ev.id}_${currentHHMM}`;
+          if (!appState.firedLog[logKey]) {
+            appState.firedLog[logKey] = true;
+            triggeredEvents.push(ev);
+          }
+        }
+      });
+
+      if (triggeredEvents.length > 0) {
+        saveFiredLog();
+        triggerReminderAlert(triggeredEvents, `Scheduled Alert (${formatTime12h(currentHHMM)})`);
+      }
+    }
+
+    // ============================================================================
+    // 9. EVENT LISTENERS & INITIALIZATION
+    // ============================================================================
+    function initEventListeners() {
+      // Quick default time change in header
+      document.getElementById('quickDefaultTimeInput').addEventListener('change', (e) => {
+        if (e.target.value) {
+          appState.settings.defaultTime = e.target.value;
+          saveSettingsToStorage();
+          renderAll();
+          showToast(`Default reminder time updated to ${formatTime12h(e.target.value)}`, 'bg-indigo-700');
+        }
+      });
+
+      // Preview Date Picker & Reset to Today
+      const previewInput = document.getElementById('previewDatePicker');
+      previewInput.value = appState.previewDateStr;
+      previewInput.addEventListener('change', (e) => {
+        if (e.target.value) {
+          appState.previewDateStr = e.target.value;
+          const d = parsePreviewDate();
+          appState.selectedMonth = d.getMonth() + 1;
+          renderAll();
+        }
+      });
+
+      document.getElementById('resetTodayBtn').addEventListener('click', () => {
+        const now = new Date();
+        appState.previewDateStr = formatDateISO(now);
+        appState.selectedMonth = now.getMonth() + 1;
+        previewInput.value = appState.previewDateStr;
+        renderAll();
+        showToast('Jumped to Today', 'bg-slate-800');
+      });
+
+      // Test Alert Now button
+      document.getElementById('testNotificationBtn').addEventListener('click', () => {
+        const refDate = parsePreviewDate();
+        const sorted = [...appState.events]
+          .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+        if (sorted.length > 0) {
+          const first = sorted[0];
+          const sameDateGroup = sorted.filter(e => e.month === first.month && e.day === first.day);
+          triggerReminderAlert(
+            sameDateGroup,
+            `Test Reminder Preview (${formatShortDate(first.month, first.day)} at ${formatTime12h(first.customTime || appState.settings.defaultTime)})`
+          );
+          showToast('Simulated reminder alert & chime triggered!', 'bg-amber-600');
+        }
+      });
+
+      // Active Reminder Banner buttons
+      document.getElementById('bannerSendWishesBtn').addEventListener('click', () => {
+        openWishesModal(appState.activeWishesEventId, true);
+      });
+      document.getElementById('bannerDismissBtn').addEventListener('click', () => {
+        document.getElementById('activeReminderBanner').classList.add('hidden');
+      });
+
+      // Batch Today/Next Group Wishes button
+      document.getElementById('sendBatchTodayWishesBtn').addEventListener('click', () => {
+        const refDate = parsePreviewDate();
+        const sorted = [...appState.events]
+          .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+        if (sorted.length > 0) {
+          openWishesModal(sorted[0].id, true);
+        }
+      });
+
+      // View mode tabs
+      document.querySelectorAll('.view-mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          appState.viewMode = btn.getAttribute('data-view-mode');
+          document.querySelectorAll('.view-mode-btn').forEach(b => {
+            if (b.getAttribute('data-view-mode') === appState.viewMode) {
+              b.className = 'view-mode-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-bold bg-white text-indigo-700 shadow-sm transition';
+            } else {
+              b.className = 'view-mode-btn px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition';
+            }
+          });
+          renderAll();
+        });
+      });
+
+      // Month tabs delegation
+      document.getElementById('monthTabsBar').addEventListener('click', (e) => {
+        const btn = e.target.closest('.month-tab-btn');
+        if (!btn) return;
+        appState.selectedMonth = parseInt(btn.getAttribute('data-month'), 10);
+        renderAll();
+      });
+
+      // Search & Type filter
+      const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+      searchInput.addEventListener('input', (e) => {
+        appState.searchQuery = e.target.value;
+        clearSearchBtn.classList.toggle('hidden', !appState.searchQuery);
+        renderEventsView();
+      });
+      clearSearchBtn.addEventListener('click', () => {
+        appState.searchQuery = '';
+        searchInput.value = '';
+        clearSearchBtn.classList.add('hidden');
+        renderEventsView();
+      });
+
+      document.getElementById('typeFilterSelect').addEventListener('change', (e) => {
+        appState.typeFilter = e.target.value;
+        renderEventsView();
+      });
+
+      // Delegated clicks on Spotlight & Events table
+      function handleEventActionClick(e) {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+        const id = btn.getAttribute('data-id');
+
+        if (action === 'edit') {
+          openEventModal(id);
+        } else if (action === 'wish') {
+          openWishesModal(id, false);
+        } else if (action === 'delete') {
+          const ev = appState.events.find(x => x.id === id);
+          if (!ev) return;
+          openConfirmModal(
+            'Delete Celebration Event',
+            `Remove "${ev.name}" (${formatShortDate(ev.month, ev.day)}) from the OARA Social Calendar?`,
+            () => {
+              appState.events = appState.events.filter(x => x.id !== id);
+              saveEventsToStorage();
+              renderAll();
+              showToast(`Removed ${ev.name} from calendar`, 'bg-rose-600');
+            }
+          );
+        } else if (action === 'add-in-month') {
+          const m = parseInt(btn.getAttribute('data-month'), 10);
+          openEventModal(null, m);
+        }
+      }
+
+      document.getElementById('spotlightContainer').addEventListener('click', handleEventActionClick);
+      document.getElementById('eventsDisplaySection').addEventListener('click', handleEventActionClick);
+
+      // Header / Footer Add Event & Modals
+      document.getElementById('openAddEventBtn').addEventListener('click', () => openEventModal(null, appState.selectedMonth));
+      document.getElementById('footerAddEventBtn').addEventListener('click', () => openEventModal(null, appState.selectedMonth));
+      document.getElementById('closeEventModalBtn').addEventListener('click', closeEventModal);
+      document.getElementById('cancelEventModalBtn').addEventListener('click', closeEventModal);
+
+      // Save Event Form
+      document.getElementById('eventForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const id = document.getElementById('eventIdInput').value;
+        const name = document.getElementById('eventNameInput').value.trim();
+        const type = document.getElementById('eventTypeInput').value;
+        const month = parseInt(document.getElementById('eventMonthInput').value, 10);
+        const day = Math.min(31, Math.max(1, parseInt(document.getElementById('eventDayInput').value, 10) || 1));
+        const customTime = document.getElementById('eventCustomTimeInput').value || '';
+        const reminderEnabled = document.getElementById('eventReminderEnabledInput').checked;
+        const phone = document.getElementById('eventPhoneInput').value.trim();
+        const notes = document.getElementById('eventNotesInput').value.trim();
+
+        if (!name) return;
+
+        if (id) {
+          const idx = appState.events.findIndex(x => x.id === id);
+          if (idx !== -1) {
+            appState.events[idx] = { id, name, type, month, day, customTime, reminderEnabled, phone, notes };
+            showToast(`Updated ${name} (${formatShortDate(month, day)})`, 'bg-indigo-600');
+          }
+        } else {
+          const newId = 'oara-custom-' + Date.now();
+          appState.events.push({ id: newId, name, type, month, day, customTime, reminderEnabled, phone, notes });
+          appState.selectedMonth = month;
+          showToast(`Added ${name} on ${formatShortDate(month, day)}!`, 'bg-emerald-600');
+        }
+
+        saveEventsToStorage();
+        closeEventModal();
+        renderAll();
+      });
+
+      // Delete from inside Edit Modal
+      document.getElementById('deleteEventFromModalBtn').addEventListener('click', () => {
+        const id = document.getElementById('eventIdInput').value;
+        const ev = appState.events.find(x => x.id === id);
+        if (!ev) return;
+        closeEventModal();
+        openConfirmModal(
+          'Delete Celebration Event',
+          `Are you sure you want to delete "${ev.name}" (${formatShortDate(ev.month, ev.day)})?`,
+          () => {
+            appState.events = appState.events.filter(x => x.id !== id);
+            saveEventsToStorage();
+            renderAll();
+            showToast(`Deleted ${ev.name}`, 'bg-rose-600');
+          }
+        );
+      });
+
+      // WhatsApp Wishes Studio Modal Controls
+      document.getElementById('openGroupWishesStudioBtn').addEventListener('click', () => {
+        openWishesModal(appState.activeWishesEventId, false);
+      });
+      document.getElementById('closeWishesModalBtn').addEventListener('click', () => {
+        document.getElementById('wishesModal').classList.add('hidden');
+      });
+      document.getElementById('wishesEventSelect').addEventListener('change', (e) => {
+        openWishesModal(e.target.value, false);
+      });
+      document.getElementById('wishesTemplateStyleSelect').addEventListener('change', refreshWishesTextarea);
+      document.getElementById('combineSameDayCheckbox').addEventListener('change', refreshWishesTextarea);
+
+      document.getElementById('toggleGroupInviteLinkBtn').addEventListener('click', () => {
+        document.getElementById('groupInviteLinkConfigBox').classList.toggle('hidden');
+      });
+
+      document.getElementById('savedGroupInviteInput').addEventListener('input', (e) => {
+        appState.settings.groupInviteUrl = e.target.value.trim();
+        saveSettingsToStorage();
+        updateGroupInviteButtonVisibility();
+      });
+
+      document.getElementById('openGroupInviteBtn').addEventListener('click', () => {
+        if (appState.settings.groupInviteUrl) {
+          window.open(appState.settings.groupInviteUrl, '_blank', 'noopener,noreferrer');
+        }
+      });
+
+      // Copy Wishes to Clipboard
+      document.getElementById('copyWishesBtn').addEventListener('click', () => {
+        const text = document.getElementById('wishesMessageTextarea').value;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('Copied WhatsApp greeting to clipboard!', 'bg-emerald-700');
+          }).catch(() => fallbackCopyText(text));
+        } else {
+          fallbackCopyText(text);
+        }
+      });
+
+      function fallbackCopyText(text) {
+        const ta = document.getElementById('wishesMessageTextarea');
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('Copied WhatsApp greeting to clipboard!', 'bg-emerald-700');
+        } catch (e) {
+          showToast('Please select and copy the message text manually.', 'bg-slate-800');
+        }
+      }
+
+      // Send to WhatsApp Group / App
+      document.getElementById('sendWhatsAppGroupBtn').addEventListener('click', () => {
+        const text = document.getElementById('wishesMessageTextarea').value;
+        const rawPhone = document.getElementById('directPhoneOverrideInput').value.replace(/[^0-9]/g, '');
+        const encoded = encodeURIComponent(text);
+        const url = rawPhone
+          ? `https://api.whatsapp.com/send?phone=${rawPhone}&text=${encoded}`
+          : `https://api.whatsapp.com/send?text=${encoded}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+        showToast('Opening WhatsApp — select the OARA Group to post!', 'bg-emerald-600');
+      });
+
+      // Reminder Settings Modal
+      document.getElementById('openReminderSettingsBtn').addEventListener('click', () => {
+        document.getElementById('masterReminderToggle').checked = appState.settings.masterEnabled;
+        document.getElementById('settingsDefaultTimeInput').value = appState.settings.defaultTime;
+        document.getElementById('settingsAdvanceDaysSelect').value = appState.settings.advanceOption;
+        document.getElementById('soundChimeToggle').checked = appState.settings.soundEnabled;
+        updateBrowserPermissionStatusUI();
+        document.getElementById('reminderSettingsModal').classList.remove('hidden');
+      });
+
+      document.getElementById('closeReminderSettingsBtn').addEventListener('click', () => {
+        document.getElementById('reminderSettingsModal').classList.add('hidden');
+      });
+
+      document.getElementById('saveReminderSettingsBtn').addEventListener('click', () => {
+        appState.settings.masterEnabled = document.getElementById('masterReminderToggle').checked;
+        appState.settings.defaultTime = document.getElementById('settingsDefaultTimeInput').value || '08:00';
+        appState.settings.advanceOption = document.getElementById('settingsAdvanceDaysSelect').value;
+        appState.settings.soundEnabled = document.getElementById('soundChimeToggle').checked;
+        saveSettingsToStorage();
+        document.getElementById('reminderSettingsModal').classList.add('hidden');
+        renderAll();
+        showToast(`Reminder settings saved (Default: ${formatTime12h(appState.settings.defaultTime)})`, 'bg-indigo-600');
+      });
+
+      document.getElementById('triggerSampleAlertFromSettingsBtn').addEventListener('click', () => {
+        document.getElementById('reminderSettingsModal').classList.add('hidden');
+        document.getElementById('testNotificationBtn').click();
+      });
+
+      document.getElementById('requestBrowserPermBtn').addEventListener('click', () => {
+        if (!('Notification' in window)) {
+          showToast('In-app banner & audio chime active (Browser API unavailable in this frame)', 'bg-indigo-700');
+          return;
+        }
+        try {
+          Notification.requestPermission().then(perm => {
+            updateBrowserPermissionStatusUI();
+            if (perm === 'granted') {
+              showToast('Browser notifications enabled!', 'bg-emerald-600');
+            } else {
+              showToast('In-app banner & audio chime reminders are active.', 'bg-indigo-700');
+            }
+          });
+        } catch (e) {
+          showToast('In-app banner & audio chime reminders are active.', 'bg-indigo-700');
+        }
+      });
+
+      // Data Backup & Reset Modal
+      document.getElementById('openDataToolsBtn').addEventListener('click', () => {
+        document.getElementById('dataToolsModal').classList.remove('hidden');
+      });
+      document.getElementById('closeDataToolsBtn').addEventListener('click', () => {
+        document.getElementById('dataToolsModal').classList.add('hidden');
+      });
+
+      document.getElementById('exportJsonBtn').addEventListener('click', () => {
+        const payload = {
+          organization: 'Orchid Avenue Residents Association (OARA)',
+          exportedAt: new Date().toISOString(),
+          settings: appState.settings,
+          events: appState.events
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'oara_social_calendar_backup.json';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast('Exported OARA calendar backup JSON', 'bg-indigo-600');
+      });
+
+      document.getElementById('importJsonInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const data = JSON.parse(ev.target.result);
+            const importedEvents = Array.isArray(data) ? data : data.events;
+            if (Array.isArray(importedEvents) && importedEvents.length > 0) {
+              appState.events = importedEvents;
+              if (data.settings) {
+                appState.settings = Object.assign({}, appState.settings, data.settings);
+                saveSettingsToStorage();
+              }
+              saveEventsToStorage();
+              renderAll();
+              document.getElementById('dataToolsModal').classList.add('hidden');
+              showToast(`Imported ${importedEvents.length} events!`, 'bg-emerald-600');
+            } else {
+              showToast('Invalid JSON format: no events array found.', 'bg-rose-600');
+            }
+          } catch (err) {
+            showToast('Could not parse JSON file.', 'bg-rose-600');
+          }
+        };
+        reader.readAsText(file);
+      });
+
+      document.getElementById('resetDefaultDataBtn').addEventListener('click', () => {
+        document.getElementById('dataToolsModal').classList.add('hidden');
+        openConfirmModal(
+          'Restore Original PDF Events?',
+          'This will replace your current list with the original 105 events from the OARA Social Calendar PDF.',
+          () => {
+            appState.events = JSON.parse(JSON.stringify(INITIAL_OARA_EVENTS));
+            saveEventsToStorage();
+            renderAll();
+            showToast('Restored all 105 original OARA Social Calendar events', 'bg-indigo-600');
+          }
+        );
+      });
+
+      // iOS / Android Mobile App & .ics Export Modal handlers
+      let deferredInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        const installBtn = document.getElementById('installPwaPromptBtn');
+        if (installBtn) installBtn.classList.remove('hidden');
+      });
+
+      document.getElementById('installPwaPromptBtn').addEventListener('click', async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        document.getElementById('installPwaPromptBtn').classList.add('hidden');
+      });
+
+      function openMobileDeployModal() {
+        document.getElementById('icsEventCountText').textContent = String(appState.events.length);
+        document.getElementById('icsReminderTimeText').textContent = formatTime12h(appState.settings.defaultTime);
+        document.getElementById('mobileDeployModal').classList.remove('hidden');
+      }
+
+      function closeMobileDeployModal() {
+        document.getElementById('mobileDeployModal').classList.add('hidden');
+      }
+
+      document.getElementById('openMobileDeployModalBtn').addEventListener('click', openMobileDeployModal);
+      document.getElementById('closeMobileDeployModalBtn').addEventListener('click', closeMobileDeployModal);
+      document.getElementById('doneMobileDeployModalBtn').addEventListener('click', closeMobileDeployModal);
+
+      document.getElementById('downloadIcsAllBtn').addEventListener('click', () => {
+        const yr = new Date().getFullYear();
+        const nowStamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+        const lines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//OARA//Orchid Avenue Residents Association Social Calendar//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'X-WR-CALNAME:OARA Social Calendar',
+          'X-WR-TIMEZONE:Asia/Kolkata'
+        ];
+
+        appState.events.forEach(ev => {
+          if (ev.reminderEnabled === false) return;
+          const remTime = ev.customTime || appState.settings.defaultTime || '08:00';
+          const [hh, mm] = remTime.split(':').map(x => String(parseInt(x, 10) || 0).padStart(2, '0'));
+          const mo = String(ev.month).padStart(2, '0');
+          const da = String(ev.day).padStart(2, '0');
+          const dtStart = `${yr}${mo}${da}T${hh}${mm}00`;
+          const dtEnd = `${yr}${mo}${da}T${hh}${String(Math.min(59, parseInt(mm, 10) + 15)).padStart(2, '0')}00`;
+          const icon = ev.type === 'BIRTHDAY' ? '🎂 Birthday' : '💍 Anniversary';
+          const summary = `OARA ${icon}: ${ev.name}`;
+          const desc = `Send OARA WhatsApp group wishes to ${ev.name} (${ev.type}).`;
+
+          lines.push('BEGIN:VEVENT');
+          lines.push(`UID:${ev.id}@oara.social.calendar`);
+          lines.push(`DTSTAMP:${nowStamp}`);
+          lines.push(`DTSTART:${dtStart}`);
+          lines.push(`DTEND:${dtEnd}`);
+          lines.push('RRULE:FREQ=YEARLY');
+          lines.push(`SUMMARY:${summary}`);
+          lines.push(`DESCRIPTION:${desc}`);
+          lines.push('BEGIN:VALARM');
+          lines.push('TRIGGER:PT0M');
+          lines.push('ACTION:DISPLAY');
+          lines.push(`DESCRIPTION:Reminder: ${summary}`);
+          lines.push('END:VALARM');
+          lines.push('END:VEVENT');
+        });
+
+        lines.push('END:VCALENDAR');
+        const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'OARA_Social_Calendar_Alarms.ics';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast('Downloaded .ics Calendar Alarm file for iOS & Android!', 'bg-emerald-600');
+      });
+
+      // Register Service Worker when hosted over HTTPS/localhost
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      }
+
+      // Confirm Modal buttons
+      document.getElementById('confirmCancelBtn').addEventListener('click', closeConfirmModal);
+      document.getElementById('confirmProceedBtn').addEventListener('click', () => {
+        const fn = appState.confirmCallback;
+        closeConfirmModal();
+        if (typeof fn === 'function') fn();
+      });
+    }
+
+    function updateBrowserPermissionStatusUI() {
+      const txt = document.getElementById('browserPermStatusText');
+      const btn = document.getElementById('requestBrowserPermBtn');
+      if (!('Notification' in window)) {
+        txt.textContent = 'In-app visual banner and musical chime alerts are active.';
+        btn.textContent = 'In-App Alerts Active';
+        return;
+      }
+      if (Notification.permission === 'granted') {
+        txt.textContent = '✅ Browser desktop/mobile notifications are enabled and active!';
+        btn.textContent = 'Enabled ✓';
+      } else if (Notification.permission === 'denied') {
+        txt.textContent = 'Browser notifications are blocked by your browser settings; in-app banner & audio chime are active.';
+        btn.textContent = 'Blocked in Browser';
+      } else {
+        txt.textContent = 'Allow system notifications so reminders pop up even when you are in another tab.';
+        btn.textContent = 'Enable Browser Alerts';
+      }
+    }
+
+    // Boot application
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      initEventListeners();
+      renderAll();
+      checkScheduledRemindersTick();
+      setInterval(checkScheduledRemindersTick, 15000);
+    });
+  </script>
+</body>
+</html>
