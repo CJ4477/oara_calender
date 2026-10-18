@@ -1,57 +1,59 @@
-# OARA Social Calendar & Reminder Hub (`https://github.com/CJ4477`)
+# OARA Social Calendar & Reminder Hub (`https://github.com/CJ4477/oara_calender`)
 
 Official Progressive Web App (PWA), Monthly Repo Sync & WhatsApp Wishes Hub for the **Orchid Avenue Residents Association (OARA)** Social Calendar (105 pre-loaded birthdays and anniversaries across all 12 months).
 
-- **GitHub Repository**: [https://github.com/CJ4477](https://github.com/CJ4477)
+- **GitHub Repository**: [https://github.com/CJ4477/oara_calender](https://github.com/CJ4477/oara_calender)
+- **Live Public App URL**: [https://cj4477.github.io/oara_calender/](https://cj4477.github.io/oara_calender/)
+- **Password-Protected Admin Console**: [https://cj4477.github.io/oara_calender/admin/](https://cj4477.github.io/oara_calender/admin/) (or `#/admin`)
 
 ---
 
 ## 🌐 Public View vs. 🔒 Password-Protected Admin Console
 
 1. **Public Resident View (`/`)**
-   - Accessible at your main GitHub Pages URL (e.g., `https://cj4477.github.io/...` or `https://clintjoy.github.io/CJ4477/`).
+   - Accessible at [https://cj4477.github.io/oara_calender/](https://cj4477.github.io/oara_calender/).
    - Residents can browse all 12 months, search celebrations, set custom reminder times, add/edit celebrations, and send bilingual Malayalam + English wishes to the **OARA WhatsApp Group**.
-   - Event deletion (`🗑️`), data reset/backup, and Monthly Repo Pack controls are completely hidden from the public view.
+   - All test/simulation buttons, event deletion (`🗑️`), data reset/backup, and Monthly Repo Pack controls are hidden from the public view.
 
 2. **Admin Console (`/admin` or `#/admin`)**
-   - Accessible via `/admin` (e.g., `.../admin`) or by clicking **🔒 Admin Console (/admin)** in the page footer.
+   - Accessible via [https://cj4477.github.io/oara_calender/admin/](https://cj4477.github.io/oara_calender/admin/) or by clicking **🛡️ Admin Console (/admin)** in the page footer.
    - Protected by a username and password login gate:
      - **Default Username**: `admin`
      - **Default Password**: `oara2026`
    - Once signed in, you unlock:
+     - **🔊 Test & Simulation Controls**: Test In-App Alert & Chime, Test Closed-App Push (15s), Send Test Push to Phone, and Simulate Reminder Now
      - **🗑️ Delete Event** buttons on every row and inside the Edit modal
      - **⚙️ Backup / Restore** (JSON export, JSON import, and reset to original PDF data)
-     - **📦 Monthly Repo Pack-Up & 1-Click GitHub Commit** (pre-configured for `https://github.com/CJ4477`)
+     - **📦 Monthly Repo Pack-Up & 1-Click Full App GitHub Deploy** (pre-configured for `CJ4477/oara_calender`)
      - **🔑 Credentials** button in the top Admin bar to customize your Admin username and password
      - **🔒 Logout** button to lock the Admin Console immediately
 
 ---
 
-## 📦 Monthly Data Pack-Up to GitHub Repository (`https://github.com/CJ4477`)
+## 🚀 Deploying Latest Changes to `https://github.com/CJ4477/oara_calender`
 
-At the end of each month (or whenever celebrations are added/updated):
-1. Sign in to the **Admin Console** (`/admin`).
-2. Click **📦 Monthly Repo Pack** in the top Admin bar (or **📦 Pack Current Month JSON** / **⬇️ Pack All 12 Months (`oara_events.json`)**).
-3. You can either:
-   - **Download JSON**: Save `oara_events.json` (or `month-XX.json`) and commit it to the `data/` folder in [https://github.com/CJ4477](https://github.com/CJ4477), **OR**
-   - **Direct 1-Click GitHub Commit**: Enter your repository (`https://github.com/CJ4477`) and a GitHub Personal Access Token (`repo` / `contents:write` scope) to commit `data/oara_events.json` directly from your phone or browser.
+### Option A: 1-Click In-Browser GitHub Deploy (No Terminal Needed)
+1. Open the app and sign in to **🛡️ Admin Console (/admin)** (`admin` / `oara2026`).
+2. Click **📦 Monthly Repo Pack** (or **🚀 GitHub Repo Commit / Setup**).
+3. Enter your **GitHub Personal Access Token** (`repo` / `contents:write` permission) and click **🌐 Deploy Full App & Latest Changes to `CJ4477/oara_calender`**.
+4. The app automatically commits `index.html`, `404.html`, `admin/index.html`, `sw.js`, `manifest.json`, `data/oara_events.json`, and `README.md` directly to `https://github.com/CJ4477/oara_calender`.
+
+### Option B: Command-Line Git Push (Using Included Script)
+Unzip `oara_mobile_pwa_deploy.zip` and run:
+```bash
+chmod +x deploy_to_github.sh
+./deploy_to_github.sh
+```
 
 ---
 
-## 📲 Real Mobile Notifications on iOS & Android
+## 📲 Real Mobile Notifications on iOS & Android (Even When App Is Closed)
 
-### 1. Automated Daily Push Notifications (`ntfy.sh` + GitHub Actions)
-- The included workflow (`.github/workflows/daily_oara_notifications.yml`) and script (`scripts/send_daily_notifications.py`) run automatically every day at **08:00 AM IST** (and on the 28th of every month for a Monthly Repo Pack reminder).
-- Install the free **ntfy** app on iPhone (App Store) or Android (Google Play) and subscribe to your topic (default: `oara-social-calendar-alerts`, or set `NTFY_TOPIC` in your GitHub repository secrets).
+### 1. Cloud-Scheduled & Daily Push Notifications (`ntfy.sh` + GitHub Actions)
+- Install the free **ntfy** app on iPhone (App Store) or Android (Google Play) and subscribe to your topic (default: `oara-social-calendar-alerts`).
+- Saving a reminder time pre-schedules Today's & Tomorrow's alerts on `ntfy.sh` cloud servers (`At:` timer) and syncs with the background Service Worker (`sw.js`).
+- The included workflow (`.github/workflows/daily_oara_notifications.yml`) also runs daily at **08:00 AM IST**.
 
 ### 2. Native Phone Calendar Lock-Screen Alarms (`.ics` Sync)
 1. Open the app and tap **📱 iOS / Android Setup** in the top bar.
-2. Set your preferred reminder time (e.g., `08:00 AM`) and tap **📅 Download .ics Alarm File (All Events)**.
-3. Open the downloaded `.ics` file on iOS (Apple Calendar) or Android (Google Calendar) to get offline lock-screen alarms for all 105 yearly celebrations.
-
----
-
-## 📱 Install as an App on iOS & Android (PWA)
-
-- **Android (Chrome)**: Open your deployed GitHub Pages URL in Chrome → tap **Install App** (or `⋮` → **Add to Home screen**).
-- **iPhone / iPad (Safari)**: Open your deployed GitHub Pages URL in Safari → tap **Share** → **Add to Home Screen** → **Add**.
+2. Tap **📅 Download .ics Alarm File (All Events)** to add all 105 recurring OARA celebrations to Apple Calendar / Google Calendar.

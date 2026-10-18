@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
 Reads data/oara_events.json (packed into the repo each month) and sends real Push
-Notifications to iOS & Android devices via ntfy.sh at the scheduled time,
-plus a monthly repo pack-up reminder on the 1st and 28th of every month.
+Notifications to iOS & Android devices via ntfy.sh.
+If an event has a customTime (or defaultReminderTime) later in the day, it uses
+ntfy.sh's 'At:' scheduled delivery header so the phone rings at the exact configured
+time even when the web app is completely closed!
 """
 import datetime
 import json
@@ -20,18 +22,29 @@ def main():
     with open('data/oara_events.json', 'r', encoding='utf-8') as f:
         data = json.load(f)
 
+    default_time = data.get('defaultReminderTime', '08:00') or '08:00'
     events = data.get('events', [])
     todays = [e for e in events if e.get('month') == month and e.get('day') == day and e.get('reminderEnabled', True)]
 
     if todays:
-        names = ", ".join(f"{e['name']} ({e['type']})" for e in todays)
-        title = f"OARA Celebrations Today ({day:02d}/{month:02d})"
-        body = (
-            f"Today's OARA Celebrations: {names}\n\n"
-            f"Open the OARA Social Calendar app to send bilingual Malayalam/English wishes to the WhatsApp group!"
-        )
-        send_ntfy(topic, title, body, tags="tada,birthday,calendar")
-        print(f"Sent push notification for {len(todays)} celebration(s): {names}")
+        for ev in todays:
+            rem_time = (ev.get('customTime') or default_time).strip()
+            try:
+                hh, mm = [int(x) for x in rem_time.split(':')[:2]]
+            except Exception:
+                hh, mm = 8, 0
+            target_dt = datetime.datetime(now_ist.year, month, day, hh, mm, 0, tzinfo=IST)
+            target_unix = int(target_dt.timestamp())
+            now_unix = int(now_ist.timestamp())
+
+            title = f"OARA Celebration Today: {ev['name']} ({ev['type']})"
+            body = (
+                f"Today is {ev['name']}'s {ev['type']} ({day:02d}/{month:02d})!\n"
+                f"Open the OARA Social Calendar app to send wishes to the WhatsApp group."
+            )
+            at_header = str(target_unix) if target_unix > now_unix + 30 else None
+            send_ntfy(topic, title, body, tags="tada,birthday,calendar", at_timestamp=at_header)
+            print(f"Dispatched notification for {ev['name']} (scheduled_at={at_header or 'immediate'})")
     else:
         print(f"No OARA celebrations on {day:02d}/{month:02d}.")
 
@@ -40,20 +53,23 @@ def main():
         send_ntfy(
             topic,
             "📦 OARA Monthly Repo Pack-Up Reminder",
-            "End of month approaching! Open the OARA app and tap '📦 Monthly Repo Pack' to commit any new or edited events to the GitHub repository.",
+            "End of month approaching! Open the OARA Admin Console (/admin) and tap '📦 Monthly Repo Pack' to commit any new or edited events to the GitHub repository.",
             tags="package,calendar"
         )
 
-def send_ntfy(topic, title, message, tags="calendar"):
+def send_ntfy(topic, title, message, tags="calendar", at_timestamp=None):
     url = f"https://ntfy.sh/{topic}"
+    headers = {
+        "Title": title,
+        "Priority": "high",
+        "Tags": tags
+    }
+    if at_timestamp:
+        headers["At"] = str(at_timestamp)
     req = urllib.request.Request(
         url,
         data=message.encode('utf-8'),
-        headers={
-            "Title": title,
-            "Priority": "high",
-            "Tags": tags
-        },
+        headers=headers,
         method="POST"
     )
     try:

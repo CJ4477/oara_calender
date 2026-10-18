@@ -46,6 +46,14 @@
     .animate-pulse-soft {
       animation: pulse-soft 2.5s infinite ease-in-out;
     }
+    .modal-scroll-body {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .modal-card-max {
+      max-height: 90vh;
+      max-height: 88dvh;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
@@ -81,7 +89,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2.5">
         <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[11px] font-extrabold uppercase tracking-wider">🛡️ Admin Console</span>
-        <span id="adminConsoleUrlLabel" class="text-xs sm:text-sm font-bold text-white">github.com/CJ4477 • /admin</span>
+        <span id="adminConsoleUrlLabel" class="text-xs sm:text-sm font-bold text-white">github.com/CJ4477/oara_calender • /admin</span>
         <span class="hidden md:inline text-xs text-slate-400">• Delete Events, Backup/Restore &amp; Monthly Repo Pack-Up Unlocked</span>
       </div>
       <div class="flex flex-wrap items-center gap-2">
@@ -220,6 +228,12 @@
           <button id="heroSendPhonePushBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-extrabold shadow-sm flex items-center gap-1.5 transition">
             <span>📲 Send Push Alert Now</span>
           </button>
+          <button id="heroTestInAppChimeBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
+            <span>🔊 Test In-App Alert &amp; Chime</span>
+          </button>
+          <button id="heroTestClosedApp15sBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs sm:text-sm font-extrabold shadow-sm flex items-center gap-1.5 transition">
+            <span>⏱️ Test Closed-App Push (15s)</span>
+          </button>
           <button id="heroOpenBackupModalBtn" type="button" class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs sm:text-sm font-bold shadow-sm flex items-center gap-1.5 transition">
             <span>⚙️ Backup / Reset Data</span>
           </button>
@@ -259,7 +273,7 @@
               <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
               <span class="text-xs font-bold uppercase tracking-wider text-indigo-200">Live Reminder Engine</span>
             </div>
-            <button id="testNotificationBtn" type="button" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white transition flex items-center gap-1">
+            <button id="testNotificationBtn" type="button" class="admin-only-el hidden text-xs font-semibold px-2.5 py-1 rounded-lg bg-white/15 hover:bg-white/25 text-white transition flex items-center gap-1">
               <span>🔊 Test Alert Now</span>
             </button>
           </div>
@@ -375,9 +389,9 @@
   <!-- ================= MODALS ================= -->
 
   <!-- 1. Add / Edit Event Modal -->
-  <div id="eventFormModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+  <div id="eventFormModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
+      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
         <div>
           <h3 id="eventModalTitle" class="text-base font-bold text-slate-900">Add New Celebration Event</h3>
           <p class="text-xs text-slate-500">Alter existing OARA calendar details or add a new resident celebration</p>
@@ -385,7 +399,7 @@
         <button id="closeEventModalBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
       </div>
 
-      <form id="eventForm" class="p-5 space-y-4">
+      <form id="eventForm" class="p-5 space-y-4 overflow-y-auto custom-scrollbar modal-scroll-body flex-1 min-h-0">
         <input type="hidden" id="eventIdInput" value="" />
 
         <div>
@@ -473,8 +487,8 @@
   </div>
 
   <!-- 2. WhatsApp Group Wishes Studio Modal -->
-  <div id="wishesModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+  <div id="wishesModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
       <div class="px-5 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg">💬</span>
@@ -571,21 +585,21 @@
     </div>
   </div>
 
-  <!-- 3. Reminder & Notification Settings Modal -->
-  <div id="reminderSettingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
-      <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+  <!-- 3. Reminder & Notification Settings Modal (Scrollable on all screens) -->
+  <div id="reminderSettingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
+      <div class="px-5 py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg">🔔</span>
           <div>
             <h3 class="text-base font-bold text-slate-900">Reminder &amp; Notification Settings</h3>
-            <p class="text-xs text-slate-500">Configure when and how you get reminded for OARA events</p>
+            <p class="text-xs text-slate-500">Scroll down for Closed-App Push &amp; Lock-Screen Alarms</p>
           </div>
         </div>
         <button id="closeReminderSettingsBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
       </div>
 
-      <div class="p-5 space-y-4">
+      <div class="p-4 sm:p-5 space-y-4 overflow-y-auto custom-scrollbar modal-scroll-body flex-1 min-h-0">
         <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200">
           <div>
             <div class="text-sm font-bold text-slate-900">Enable Scheduled Reminders</div>
@@ -624,25 +638,30 @@
           </label>
         </div>
 
-        <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div class="text-xs font-bold text-indigo-950">Browser Desktop / Mobile Notifications</div>
-            <div id="browserPermStatusText" class="text-[11px] text-indigo-700">Allow system notifications so reminders pop up even when you're in another tab.</div>
+        <div class="p-3.5 rounded-xl bg-indigo-50 border border-indigo-100 space-y-2.5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div>
+              <div class="text-xs font-bold text-indigo-950">1. Browser &amp; Background Service Worker Alerts</div>
+              <div id="browserPermStatusText" class="text-[11px] text-indigo-700">Allow system notifications so the background Service Worker can alert you even when the tab is minimized or closed.</div>
+            </div>
+            <button id="requestBrowserPermBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 shadow-2xs transition">
+              Enable Browser Alerts
+            </button>
           </div>
-          <button id="requestBrowserPermBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shrink-0 shadow-2xs transition">
-            Enable Browser Alerts
-          </button>
+          <div id="closedAppTestAdminRow" class="admin-only-el hidden pt-2 border-t border-indigo-200/70 flex flex-wrap items-center justify-between gap-2">
+            <span class="text-[11px] text-indigo-900 font-medium" id="closedAppTestStatusText">Admin Test: Verify notifications arrive while the app is closed:</span>
+            <button id="testClosedAppPushBtn" type="button" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-extrabold shrink-0 shadow-2xs transition">
+              ⏱️ Test Closed-App Alert (In 15s)
+            </button>
+          </div>
         </div>
 
         <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <div class="text-xs font-bold text-emerald-950">📲 Real Mobile Push Notifications (iOS &amp; Android via ntfy.sh)</div>
-              <div class="text-[11px] text-emerald-800">Get instant lock-screen push notifications on iPhone &amp; Android (works with the free <b>ntfy</b> app + GitHub Actions daily cron).</div>
+              <div class="text-xs font-bold text-emerald-950">2. Cloud Push When App is Completely Closed (iOS &amp; Android via ntfy.sh)</div>
+              <div class="text-[11px] text-emerald-800">When you save a reminder time, the app pre-schedules Today's &amp; Tomorrow's alerts on <b>ntfy.sh</b> cloud servers (<code>At:</code> timer) + GitHub Actions so your phone rings even when the browser is completely closed!</div>
             </div>
-            <button id="testNtfyPushBtn" type="button" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shrink-0 transition">
-              🚀 Send Test Push to Phone
-            </button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             <div class="sm:col-span-2">
@@ -652,15 +671,39 @@
             <div class="flex items-end">
               <label class="inline-flex items-center gap-1.5 cursor-pointer pb-1.5">
                 <input id="ntfyAutoPushToggle" type="checkbox" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500" />
-                <span class="text-xs font-bold text-emerald-950">Auto-Push</span>
+                <span class="text-xs font-bold text-emerald-950">Cloud Auto-Push</span>
               </label>
             </div>
           </div>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button id="testNtfyPushBtn" type="button" class="admin-only-el hidden px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">
+              🚀 Send Test Push to Phone
+            </button>
+            <button id="scheduleCloudPushNowBtn" type="button" class="px-3 py-1.5 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold transition">
+              ☁️ Pre-Schedule Cloud Push for Today/Tomorrow
+            </button>
+            <button id="openNtfyAppSubscribeBtn" type="button" class="px-3 py-1.5 rounded-lg bg-white hover:bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-bold transition">
+              📲 Open Topic in ntfy App
+            </button>
+          </div>
+          <div id="cloudScheduleStatusText" class="text-[11px] font-semibold text-emerald-900">
+            Install the free <b>ntfy</b> app (App Store / Play Store) and subscribe to the topic above once.
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-100 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div>
+            <div class="text-xs font-bold text-slate-900">3. Offline Phone Calendar Lock-Screen Alarms (.ics)</div>
+            <div class="text-[11px] text-slate-600">Add all 105 OARA celebrations to Apple Calendar / Google Calendar for guaranteed offline OS alarms when the app is closed.</div>
+          </div>
+          <button id="settingsDownloadIcsBtn" type="button" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shrink-0 transition">
+            📅 Sync .ics Alarms
+          </button>
         </div>
       </div>
 
-      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
-        <button id="triggerSampleAlertFromSettingsBtn" type="button" class="px-3.5 py-2 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition">
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <button id="triggerSampleAlertFromSettingsBtn" type="button" class="admin-only-el hidden px-3.5 py-2 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition">
           🔔 Simulate Reminder Now
         </button>
         <button id="saveReminderSettingsBtn" type="button" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold shadow-sm transition">
@@ -671,8 +714,8 @@
   </div>
 
   <!-- 4. Data Backup / Reset / Confirmation Modal -->
-  <div id="dataToolsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+  <div id="dataToolsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
       <div class="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 class="text-base font-bold text-slate-900">Calendar Data Backup &amp; Reset</h3>
         <button id="closeDataToolsBtn" type="button" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 flex items-center justify-center font-bold">✕</button>
@@ -719,8 +762,8 @@
   </div>
 
   <!-- 6. iOS / Android Mobile App & Deployment Hub Modal -->
-  <div id="mobileDeployModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+  <div id="mobileDeployModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
       <div class="px-5 py-4 bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 text-white flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-lg">📱</span>
@@ -800,8 +843,8 @@
   </div>
 
   <!-- 7. Monthly Repo Pack-Up & GitHub Sync Modal -->
-  <div id="repoSyncModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]">
+  <div id="repoSyncModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs overflow-y-auto flex items-start sm:items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full my-auto shadow-2xl border border-slate-200 overflow-hidden flex flex-col modal-card-max">
       <div class="px-5 py-4 bg-gradient-to-r from-violet-700 via-indigo-700 to-slate-900 text-white flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <span class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-lg">📦</span>
@@ -870,7 +913,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
               <label for="ghRepoOwnerInput" class="block text-[11px] font-semibold text-slate-600 mb-1">GitHub Repo (owner/repo)</label>
-              <input id="ghRepoOwnerInput" type="text" value="CJ4477" placeholder="https://github.com/CJ4477 or CJ4477/repo" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs" />
+              <input id="ghRepoOwnerInput" type="text" value="CJ4477/oara_calender" placeholder="CJ4477/oara_calender" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-xs" />
             </div>
             <div>
               <label for="ghBranchInput" class="block text-[11px] font-semibold text-slate-600 mb-1">Branch &amp; Target File Path</label>
@@ -882,11 +925,16 @@
             </div>
           </div>
 
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <span class="text-[11px] text-slate-500" id="ghCommitStatusText">Ready to pack &amp; commit monthly update.</span>
-            <button id="pushToGithubRepoBtn" type="button" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-sm transition">
-              🚀 Commit &amp; Push Monthly Pack to GitHub
-            </button>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+            <span class="text-[11px] text-slate-600 font-medium" id="ghCommitStatusText">Ready to deploy to github.com/CJ4477/oara_calender.</span>
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="pushToGithubRepoBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold shadow-sm transition">
+                🚀 Commit &amp; Push Monthly Pack to GitHub
+              </button>
+              <button id="deployFullAppToGithubBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition">
+                🌐 Deploy Full App &amp; Admin Console to GitHub
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1145,7 +1193,7 @@
         groupInviteUrl: '',
         ntfyTopic: 'oara-social-calendar-alerts',
         ntfyAutoPush: true,
-        ghRepo: 'https://github.com/CJ4477',
+        ghRepo: 'CJ4477/oara_calender',
         ghBranch: 'main',
         ghToken: '',
         lastPackedMonth: '',
@@ -1198,8 +1246,8 @@
         const rawSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
         if (rawSettings) {
           const parsedSettings = JSON.parse(rawSettings);
-          if (parsedSettings.ghRepo === 'clintjoy/oara_calender') {
-            parsedSettings.ghRepo = 'https://github.com/CJ4477';
+          if (parsedSettings.ghRepo === 'clintjoy/oara_calender' || parsedSettings.ghRepo === 'https://github.com/CJ4477' || parsedSettings.ghRepo === 'CJ4477') {
+            parsedSettings.ghRepo = 'CJ4477/oara_calender';
           }
           appState.settings = Object.assign({}, appState.settings, parsedSettings);
         }
@@ -1467,7 +1515,7 @@
           const basePath = (window.location.pathname || '').replace(/\/admin\/?.*$/i, '').replace(/\/index\.html$/i, '');
           adminUrlLabel.textContent = `${window.location.hostname}${basePath}/admin`;
         } else {
-          adminUrlLabel.textContent = 'github.com/CJ4477 • /admin';
+          adminUrlLabel.textContent = 'github.com/CJ4477/oara_calender • /admin';
         }
       }
       document.querySelectorAll('.admin-only-el').forEach(el => {
@@ -2077,8 +2125,9 @@
         if (e.target.value) {
           appState.settings.defaultTime = e.target.value;
           saveSettingsToStorage();
+          syncRemindersToBackgroundServiceWorker(true);
           renderAll();
-          showToast(`Default reminder time updated to ${formatTime12h(e.target.value)}`, 'bg-indigo-700');
+          showToast(`Default reminder time updated to ${formatTime12h(e.target.value)} (synced for background alerts)`, 'bg-indigo-700');
         }
       });
 
@@ -2256,7 +2305,129 @@
         appState.settings.unsavedRepoEdits = (appState.settings.unsavedRepoEdits || 0) + 1;
         saveSettingsToStorage();
         saveEventsToStorage();
-        // Wire prominent Hero Monthly Repo Pack & Push buttons
+        syncRemindersToBackgroundServiceWorker(true);
+        const EMBEDDED_SW_JS = "const CACHE_NAME = 'oara-calendar-v4';\nconst ASSETS = [\n  './',\n  './index.html',\n  './manifest.json',\n  './icon-192.png',\n  './icon-512.png',\n  './data/oara_events.json'\n];\n\nlet swState = {\n  events: [],\n  settings: {\n    masterEnabled: true,\n    defaultTime: '08:00',\n    advanceOption: 'same_day'\n  },\n  firedKeys: {},\n  scheduledTimers: []\n};\n\nself.addEventListener('install', (event) => {\n  event.waitUntil(\n    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(() => {})\n  );\n  self.skipWaiting();\n});\n\nself.addEventListener('activate', (event) => {\n  event.waitUntil(\n    caches.keys().then((keys) =>\n      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))\n    )\n  );\n  self.clients.claim();\n});\n\n// Network-First with Offline Cache Fallback so GitHub Pages updates always show immediately\nself.addEventListener('fetch', (event) => {\n  if (event.request.method !== 'GET') return;\n  event.respondWith(\n    fetch(event.request)\n      .then((networkResp) => {\n        if (networkResp && networkResp.status === 200 && event.request.url.startsWith(self.location.origin)) {\n          const respClone = networkResp.clone();\n          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, respClone)).catch(() => {});\n        }\n        return networkResp;\n      })\n      .catch(() => caches.match(event.request))\n  );\n});\n\nfunction computeMsUntilReminder(ev, settings, now) {\n  if (!settings || !settings.masterEnabled || ev.reminderEnabled === false) return -1;\n  const remTime = ev.customTime || settings.defaultTime || '08:00';\n  const parts = remTime.split(':');\n  const hh = parseInt(parts[0], 10) || 8;\n  const mm = parseInt(parts[1], 10) || 0;\n\n  for (let offsetDays = 0; offsetDays <= 1; offsetDays++) {\n    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offsetDays, hh, mm, 0);\n    const diffMs = target.getTime() - now.getTime();\n    if (diffMs < -55000) continue;\n\n    const isSameDay = (target.getMonth() + 1 === ev.month) && (target.getDate() === ev.day);\n    const nextDay = new Date(target.getFullYear(), target.getMonth(), target.getDate() + 1);\n    const isDayBefore = (nextDay.getMonth() + 1 === ev.month) && (nextDay.getDate() === ev.day);\n\n    const opt = settings.advanceOption || 'same_day';\n    if ((isSameDay && (opt === 'same_day' || opt === 'both')) ||\n        (isDayBefore && (opt === 'day_before' || opt === 'both'))) {\n      return Math.max(0, diffMs);\n    }\n  }\n  return -1;\n}\n\nself.addEventListener('message', (event) => {\n  const data = event.data || {};\n\n  if (data.type === 'SCHEDULE_DELAYED_NOTIFICATION') {\n    const delayMs = Math.max(1000, Number(data.delayMs) || 15000);\n    const title = data.title || '\ud83c\udf89 OARA Social Calendar Reminder';\n    const body = data.body || 'Celebration reminder! Tap to open the OARA Social Calendar and send WhatsApp wishes.';\n\n    event.waitUntil(\n      new Promise((resolve) => {\n        setTimeout(() => {\n          self.registration.showNotification(title, {\n            body: body,\n            icon: './icon-192.png',\n            badge: './icon-192.png',\n            tag: 'oara-delayed-test-' + Date.now(),\n            renotify: true,\n            requireInteraction: true,\n            vibrate: [250, 120, 250, 120, 300]\n          }).then(resolve).catch(resolve);\n        }, delayMs);\n      })\n    );\n    return;\n  }\n\n  if (data.type === 'SYNC_REMINDERS') {\n    swState.events = Array.isArray(data.events) ? data.events : swState.events;\n    swState.settings = Object.assign({}, swState.settings, data.settings || {});\n\n    // Clear old timers\n    swState.scheduledTimers.forEach((id) => clearTimeout(id));\n    swState.scheduledTimers = [];\n\n    const now = new Date();\n    const nearWaitPromises = [];\n\n    swState.events.forEach((ev) => {\n      const diffMs = computeMsUntilReminder(ev, swState.settings, now);\n      if (diffMs < 0) return;\n\n      const icon = ev.type === 'BIRTHDAY' ? '\ud83c\udf82 Birthday' : '\ud83d\udc8d Anniversary';\n      const title = `\ud83c\udf89 OARA Reminder: ${ev.name}`;\n      const body = `${ev.name} (${icon})! Tap to open the OARA app and send WhatsApp group wishes.`;\n      const fireKey = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${ev.id}_${ev.customTime || swState.settings.defaultTime}`;\n\n      // 1. Use TimestampTrigger API if browser supports OS-scheduled notifications\n      if (' TimestampTrigger' in self || 'TimestampTrigger' in self) {\n        try {\n          self.registration.showNotification(title, {\n            body: body,\n            icon: './icon-192.png',\n            badge: './icon-192.png',\n            tag: fireKey,\n            showTrigger: new self.TimestampTrigger(now.getTime() + diffMs)\n          }).catch(() => {});\n        } catch (e) {}\n      }\n\n      // 2. For reminders due within the next 30 minutes, hold a Service Worker wake timer\n      if (diffMs <= 30 * 60 * 1000 && !swState.firedKeys[fireKey]) {\n        const p = new Promise((resolve) => {\n          const tid = setTimeout(() => {\n            if (!swState.firedKeys[fireKey]) {\n              swState.firedKeys[fireKey] = true;\n              self.registration.showNotification(title, {\n                body: body,\n                icon: './icon-192.png',\n                badge: './icon-192.png',\n                tag: fireKey,\n                renotify: true,\n                requireInteraction: true,\n                vibrate: [250, 120, 250]\n              }).then(resolve).catch(resolve);\n            } else {\n              resolve();\n            }\n          }, diffMs);\n          swState.scheduledTimers.push(tid);\n        });\n        nearWaitPromises.push(p);\n      }\n    });\n\n    if (nearWaitPromises.length > 0) {\n      event.waitUntil(Promise.all(nearWaitPromises));\n    }\n  }\n});\n\nself.addEventListener('periodicsync', (event) => {\n  if (event.tag === 'oara-daily-reminder-check') {\n    event.waitUntil(\n      fetch(['.', 'data', 'oara_events.json'].join('/'), { cache: 'no-store' })\n        .then((r) => (r.ok ? r.json() : null))\n        .then((data) => {\n          if (!data || !Array.isArray(data.events)) return;\n          const now = new Date();\n          const m = now.getMonth() + 1;\n          const d = now.getDate();\n          const todays = data.events.filter((e) => e.month === m && e.day === d && e.reminderEnabled !== false);\n          if (todays.length > 0) {\n            const names = todays.map((e) => `${e.name} (${e.type})`).join(', ');\n            return self.registration.showNotification('\ud83c\udf89 OARA Celebrations Today!', {\n              body: `${names} \u2014 Tap to send WhatsApp wishes!`,\n              icon: './icon-192.png',\n              badge: './icon-192.png',\n              tag: `oara-periodic-${now.getFullYear()}-${m}-${d}`\n            });\n          }\n        })\n        .catch(() => {})\n    );\n  }\n});\n\nself.addEventListener('push', (event) => {\n  let payload = { title: '\ud83c\udf89 OARA Social Calendar Reminder', body: \"Check today's celebrations and send WhatsApp wishes!\" };\n  if (event.data) {\n    try {\n      payload = Object.assign(payload, event.data.json());\n    } catch (e) {\n      payload.body = event.data.text();\n    }\n  }\n  event.waitUntil(\n    self.registration.showNotification(payload.title, {\n      body: payload.body,\n      icon: './icon-192.png',\n      badge: './icon-192.png',\n      requireInteraction: true,\n      vibrate: [200, 100, 200]\n    })\n  );\n});\n\nself.addEventListener('notificationclick', (event) => {\n  event.notification.close();\n  event.waitUntil(\n    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {\n      if (clientList.length > 0) {\n        return clientList[0].focus();\n      }\n      return clients.openWindow('./');\n    })\n  );\n});\n";
+      const EMBEDDED_MANIFEST_JSON = "{\n  \"name\": \"OARA Social Calendar & Reminder Hub\",\n  \"short_name\": \"OARA Calendar\",\n  \"description\": \"Orchid Avenue Residents Association (OARA) Social Calendar, Custom Reminders & WhatsApp Wishes App\",\n  \"start_url\": \"./index.html\",\n  \"scope\": \"./\",\n  \"display\": \"standalone\",\n  \"orientation\": \"portrait-primary\",\n  \"background_color\": \"#f8fafc\",\n  \"theme_color\": \"#3730a3\",\n  \"icons\": [\n    {\n      \"src\": \"icon-192.png\",\n      \"sizes\": \"192x192\",\n      \"type\": \"image/png\",\n      \"purpose\": \"any maskable\"\n    },\n    {\n      \"src\": \"icon-512.png\",\n      \"sizes\": \"512x512\",\n      \"type\": \"image/png\",\n      \"purpose\": \"any maskable\"\n    }\n  ]\n}\n";
+      const EMBEDDED_README_MD = "# OARA Social Calendar & Reminder Hub (`https://github.com/CJ4477/oara_calender`)\n\nOfficial Progressive Web App (PWA), Monthly Repo Sync & WhatsApp Wishes Hub for the **Orchid Avenue Residents Association (OARA)** Social Calendar (105 pre-loaded birthdays and anniversaries across all 12 months).\n\n- **GitHub Repository**: [https://github.com/CJ4477/oara_calender](https://github.com/CJ4477/oara_calender)\n- **Live Public App URL**: [https://cj4477.github.io/oara_calender/](https://cj4477.github.io/oara_calender/)\n- **Password-Protected Admin Console**: [https://cj4477.github.io/oara_calender/admin/](https://cj4477.github.io/oara_calender/admin/) (or `#/admin`)\n\n---\n\n## \ud83c\udf10 Public View vs. \ud83d\udd12 Password-Protected Admin Console\n\n1. **Public Resident View (`/`)**\n   - Accessible at [https://cj4477.github.io/oara_calender/](https://cj4477.github.io/oara_calender/).\n   - Residents can browse all 12 months, search celebrations, set custom reminder times, add/edit celebrations, and send bilingual Malayalam + English wishes to the **OARA WhatsApp Group**.\n   - All test/simulation buttons, event deletion (`\ud83d\uddd1\ufe0f`), data reset/backup, and Monthly Repo Pack controls are hidden from the public view.\n\n2. **Admin Console (`/admin` or `#/admin`)**\n   - Accessible via [https://cj4477.github.io/oara_calender/admin/](https://cj4477.github.io/oara_calender/admin/) or by clicking **\ud83d\udee1\ufe0f Admin Console (/admin)** in the page footer.\n   - Protected by a username and password login gate:\n     - **Default Username**: `admin`\n     - **Default Password**: `oara2026`\n   - Once signed in, you unlock:\n     - **\ud83d\udd0a Test & Simulation Controls**: Test In-App Alert & Chime, Test Closed-App Push (15s), Send Test Push to Phone, and Simulate Reminder Now\n     - **\ud83d\uddd1\ufe0f Delete Event** buttons on every row and inside the Edit modal\n     - **\u2699\ufe0f Backup / Restore** (JSON export, JSON import, and reset to original PDF data)\n     - **\ud83d\udce6 Monthly Repo Pack-Up & 1-Click Full App GitHub Deploy** (pre-configured for `CJ4477/oara_calender`)\n     - **\ud83d\udd11 Credentials** button in the top Admin bar to customize your Admin username and password\n     - **\ud83d\udd12 Logout** button to lock the Admin Console immediately\n\n---\n\n## \ud83d\ude80 Deploying Latest Changes to `https://github.com/CJ4477/oara_calender`\n\n### Option A: 1-Click In-Browser GitHub Deploy (No Terminal Needed)\n1. Open the app and sign in to **\ud83d\udee1\ufe0f Admin Console (/admin)** (`admin` / `oara2026`).\n2. Click **\ud83d\udce6 Monthly Repo Pack** (or **\ud83d\ude80 GitHub Repo Commit / Setup**).\n3. Enter your **GitHub Personal Access Token** (`repo` / `contents:write` permission) and click **\ud83c\udf10 Deploy Full App & Latest Changes to `CJ4477/oara_calender`**.\n4. The app automatically commits `index.html`, `404.html`, `admin/index.html`, `sw.js`, `manifest.json`, `data/oara_events.json`, and `README.md` directly to `https://github.com/CJ4477/oara_calender`.\n\n### Option B: Command-Line Git Push (Using Included Script)\nUnzip `oara_mobile_pwa_deploy.zip` and run:\n```bash\nchmod +x deploy_to_github.sh\n./deploy_to_github.sh\n```\n\n---\n\n## \ud83d\udcf2 Real Mobile Notifications on iOS & Android (Even When App Is Closed)\n\n### 1. Cloud-Scheduled & Daily Push Notifications (`ntfy.sh` + GitHub Actions)\n- Install the free **ntfy** app on iPhone (App Store) or Android (Google Play) and subscribe to your topic (default: `oara-social-calendar-alerts`).\n- Saving a reminder time pre-schedules Today's & Tomorrow's alerts on `ntfy.sh` cloud servers (`At:` timer) and syncs with the background Service Worker (`sw.js`).\n- The included workflow (`.github/workflows/daily_oara_notifications.yml`) also runs daily at **08:00 AM IST**.\n\n### 2. Native Phone Calendar Lock-Screen Alarms (`.ics` Sync)\n1. Open the app and tap **\ud83d\udcf1 iOS / Android Setup** in the top bar.\n2. Tap **\ud83d\udcc5 Download .ics Alarm File (All Events)** to add all 105 recurring OARA celebrations to Apple Calendar / Google Calendar.\n";
+
+      async function githubCommitSingleFile(repo, branch, token, filePath, utf8Content, commitMessage) {
+        const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+        let sha = undefined;
+        const refUrl = apiUrl + '?ref=' + encodeURIComponent(branch);
+        const getRes = await fetch(refUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+        if (getRes.ok) {
+          const existing = await getRes.json();
+          sha = existing.sha;
+        }
+        const contentB64 = btoa(unescape(encodeURIComponent(utf8Content)));
+        const putBody = {
+          message: commitMessage,
+          content: contentB64,
+          branch: branch
+        };
+        if (sha) putBody.sha = sha;
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(putBody)
+        });
+        if (!putRes.ok) {
+          const errData = await putRes.json().catch(() => ({}));
+          throw new Error(errData.message || `HTTP ${putRes.status} on ${filePath}`);
+        }
+      }
+
+      function buildCleanDeploymentHtml(isAdminEntry) {
+        const clone = document.documentElement.cloneNode(true);
+        // Ensure modals and transient banners start hidden in deployed file
+        ['activeReminderBanner', 'adminConsoleTopBar', 'eventFormModal', 'wishesModal',
+         'reminderSettingsModal', 'dataToolsModal', 'confirmModal', 'mobileDeployModal',
+         'repoSyncModal', 'adminLoginModal', 'adminCredentialsModal'].forEach(id => {
+          const el = clone.querySelector('#' + id);
+          if (el) el.classList.add('hidden');
+        });
+        clone.querySelectorAll('.admin-only-el').forEach(el => el.classList.add('hidden'));
+        const toastC = clone.querySelector('#toastContainer');
+        if (toastC) toastC.innerHTML = '';
+
+        let fullHtml = '<!DOCTYPE html>\n' + clone.outerHTML;
+        if (isAdminEntry) {
+          fullHtml = fullHtml.replace('href="manifest.json"', 'href="../manifest.json"');
+          fullHtml = fullHtml.replace("register('sw.js')", "register('../sw.js')");
+          fullHtml = fullHtml.replace("['.', 'data', 'oara_events.json']", "['..', 'data', 'oara_events.json']");
+          fullHtml = fullHtml.replace('<script>', '<script>\n    window.OARA_FORCE_ADMIN = true;', 1);
+        }
+        return fullHtml;
+      }
+
+      document.getElementById('deployFullAppToGithubBtn').addEventListener('click', async () => {
+        const rawRepoInput = document.getElementById('ghRepoOwnerInput').value.trim() || 'CJ4477/oara_calender';
+        const repo = normalizeGithubRepoSlug(rawRepoInput);
+        const branch = document.getElementById('ghBranchInput').value.trim() || 'main';
+        const token = document.getElementById('ghTokenInput').value.trim();
+        const statusEl = document.getElementById('ghCommitStatusText');
+
+        appState.settings.ghRepo = repo;
+        appState.settings.ghBranch = branch;
+        appState.settings.ghToken = token;
+        saveSettingsToStorage();
+
+        if (!repo || !repo.includes('/') || !token) {
+          statusEl.textContent = '⚠️ Enter your GitHub Personal Access Token (with repo / contents:write scope) to deploy.';
+          showToast('Enter your GitHub Personal Access Token first', 'bg-amber-600');
+          document.getElementById('ghTokenInput').focus();
+          return;
+        }
+
+        const indexHtmlStr = buildCleanDeploymentHtml(false);
+        const adminHtmlStr = buildCleanDeploymentHtml(true);
+        const eventsJsonStr = JSON.stringify(buildRepoPayload('ALL'), null, 2);
+        const commitMsg = `deploy: update OARA Social Calendar app & Admin Console (${formatDateISO(new Date())})`;
+
+        const filesToDeploy = [
+          { path: 'index.html', content: indexHtmlStr },
+          { path: '404.html', content: indexHtmlStr },
+          { path: 'admin/index.html', content: adminHtmlStr },
+          { path: 'sw.js', content: EMBEDDED_SW_JS },
+          { path: 'manifest.json', content: EMBEDDED_MANIFEST_JSON },
+          { path: 'data/oara_events.json', content: eventsJsonStr },
+          { path: 'README.md', content: EMBEDDED_README_MD }
+        ];
+
+        try {
+          for (let i = 0; i < filesToDeploy.length; i++) {
+            const item = filesToDeploy[i];
+            statusEl.textContent = `⏳ Deploying (${i + 1}/${filesToDeploy.length}): ${item.path} to ${repo}...`;
+            await githubCommitSingleFile(repo, branch, token, item.path, item.content, commitMsg);
+          }
+          appState.settings.lastPackedMonth = formatDateISO(new Date()).slice(0, 7);
+          appState.settings.unsavedRepoEdits = 0;
+          saveSettingsToStorage();
+          updateRepoBadgeUI();
+          statusEl.textContent = `✅ Deployed all ${filesToDeploy.length} files to https://github.com/${repo}!`;
+          showToast(`Successfully deployed full app to ${repo}!`, 'bg-emerald-600');
+        } catch (err) {
+          statusEl.textContent = `❌ Deploy error: ${err.message || 'Check token permissions'}`;
+          showToast(`GitHub deploy failed: ${err.message || 'Check token'}`, 'bg-rose-600');
+        }
+      });
+
+      updateRepoBadgeUI();
+        closeEventModal();
+        renderAll();
+      });
+
+      // Wire prominent Hero Monthly Repo Pack & Push buttons at init
       document.getElementById('heroPackCurrentMonthBtn').addEventListener('click', () => {
         document.getElementById('repoPackMonthSelect').value = String(appState.selectedMonth || (new Date().getMonth() + 1));
         document.getElementById('downloadRepoJsonBtn').click();
@@ -2289,11 +2460,6 @@
           );
           sendNtfyPushNotification(sameDateGroup, `OARA Celebration Alert (${formatShortDate(first.month, first.day)})`, false);
         }
-      });
-
-      updateRepoBadgeUI();
-        closeEventModal();
-        renderAll();
       });
 
       // Delete from inside Edit Modal
@@ -2402,9 +2568,81 @@
         appState.settings.ntfyTopic = document.getElementById('ntfyTopicInput').value.trim() || 'oara-social-calendar-alerts';
         appState.settings.ntfyAutoPush = document.getElementById('ntfyAutoPushToggle').checked;
         saveSettingsToStorage();
+        syncRemindersToBackgroundServiceWorker(true);
         document.getElementById('reminderSettingsModal').classList.add('hidden');
         renderAll();
-        showToast(`Reminder settings saved (Default: ${formatTime12h(appState.settings.defaultTime)})`, 'bg-indigo-600');
+        showToast(`Saved & synced background alerts (Default: ${formatTime12h(appState.settings.defaultTime)})`, 'bg-indigo-600');
+      });
+
+      document.getElementById('scheduleCloudPushNowBtn').addEventListener('click', () => {
+        appState.settings.defaultTime = document.getElementById('settingsDefaultTimeInput').value || appState.settings.defaultTime;
+        appState.settings.ntfyTopic = document.getElementById('ntfyTopicInput').value.trim() || appState.settings.ntfyTopic;
+        saveSettingsToStorage();
+        scheduleUpcomingCloudPushes(false);
+      });
+
+      document.getElementById('openNtfyAppSubscribeBtn').addEventListener('click', () => {
+        const topic = document.getElementById('ntfyTopicInput').value.trim() || appState.settings.ntfyTopic || 'oara-social-calendar-alerts';
+        appState.settings.ntfyTopic = topic;
+        saveSettingsToStorage();
+        window.open(`https://ntfy.sh/${encodeURIComponent(topic)}`, '_blank', 'noopener,noreferrer');
+      });
+
+      document.getElementById('settingsDownloadIcsBtn').addEventListener('click', () => {
+        appState.settings.defaultTime = document.getElementById('settingsDefaultTimeInput').value || appState.settings.defaultTime;
+        saveSettingsToStorage();
+        document.getElementById('downloadIcsAllBtn').click();
+      });
+
+      document.getElementById('testClosedAppPushBtn').addEventListener('click', async () => {
+        const topic = document.getElementById('ntfyTopicInput').value.trim() || appState.settings.ntfyTopic || 'oara-social-calendar-alerts';
+        appState.settings.ntfyTopic = topic;
+        saveSettingsToStorage();
+
+        if ('Notification' in window && Notification.permission === 'default') {
+          try { await Notification.requestPermission(); } catch (e) {}
+          updateBrowserPermissionStatusUI();
+        }
+
+        const refDate = parsePreviewDate();
+        const sorted = [...appState.events]
+          .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+          .sort((a, b) => a.daysLeft - b.daysLeft);
+        const sampleEv = sorted[0] || appState.events[0];
+        const title = `🎉 OARA Closed-App Reminder Test`;
+        const body = `Upcoming: ${sampleEv.name} (${sampleEv.type === 'BIRTHDAY' ? '🎂 Birthday' : '💍 Anniversary'} - ${formatShortDate(sampleEv.month, sampleEv.day)}). Tap to send WhatsApp wishes!`;
+
+        // 1. Schedule in Service Worker (fires in 15s even if tab/PWA is minimized or closed)
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then(reg => {
+            if (reg.active) {
+              reg.active.postMessage({
+                type: 'SCHEDULE_DELAYED_NOTIFICATION',
+                delayMs: 15000,
+                title: title,
+                body: body
+              });
+            }
+          }).catch(() => {});
+        }
+
+        // 2. Also schedule on ntfy.sh cloud server with 'In: 15s' header (delivers to phone even if browser is force-closed)
+        fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+          method: 'POST',
+          body: body,
+          headers: {
+            'Title': title,
+            'Priority': 'high',
+            'Tags': 'tada,calendar',
+            'In': '15s'
+          }
+        }).catch(() => {});
+
+        const statusTxt = document.getElementById('closedAppTestStatusText');
+        if (statusTxt) {
+          statusTxt.textContent = '⏳ Scheduled! Minimize or close the app right now — alert fires in 15 seconds!';
+        }
+        showToast('⏳ Alert scheduled for 15s from now! Close or minimize the app now to test.', 'bg-amber-600');
       });
 
       document.getElementById('triggerSampleAlertFromSettingsBtn').addEventListener('click', () => {
@@ -2585,9 +2823,144 @@
         showToast('Downloaded .ics Calendar Alarm file for iOS & Android!', 'bg-emerald-600');
       });
 
-      // Register Service Worker when hosted over HTTPS/localhost
+      // Register Service Worker & Sync Reminders for Closed-App Background Delivery
+      const STORAGE_KEY_CLOUD_SCHEDULED = 'oara_cloud_scheduled_ntfy_v1';
+
+      function syncRemindersToBackgroundServiceWorker(alsoScheduleCloud) {
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+          navigator.serviceWorker.ready.then(reg => {
+            const payload = {
+              type: 'SYNC_REMINDERS',
+              events: appState.events,
+              settings: appState.settings,
+              updatedAt: Date.now()
+            };
+            if (reg.active) {
+              reg.active.postMessage(payload);
+            }
+            if (reg.periodicSync) {
+              reg.periodicSync.register('oara-daily-reminder-check', {
+                minInterval: 15 * 60 * 1000
+              }).catch(() => {});
+            }
+          }).catch(() => {});
+        }
+        if (alsoScheduleCloud && appState.settings.masterEnabled && appState.settings.ntfyAutoPush) {
+          scheduleUpcomingCloudPushes(true);
+        }
+      }
+
       if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.register('sw.js').then(() => {
+          syncRemindersToBackgroundServiceWorker(false);
+        }).catch(() => {});
+      }
+
+      // Pre-schedule Today's & Tomorrow's reminders on ntfy.sh Cloud Server using the 'At:' header
+      // so the push arrives on iOS/Android at the exact minute EVEN WHEN THE APP IS COMPLETELY CLOSED!
+      function scheduleUpcomingCloudPushes(silentToast) {
+        const topic = (document.getElementById('ntfyTopicInput') && document.getElementById('ntfyTopicInput').value.trim()) || appState.settings.ntfyTopic;
+        if (!topic || !appState.settings.masterEnabled) return;
+
+        let scheduledMap = {};
+        try {
+          scheduledMap = JSON.parse(localStorage.getItem(STORAGE_KEY_CLOUD_SCHEDULED) || '{}') || {};
+        } catch (e) {}
+
+        const now = new Date();
+        const nowSec = Math.floor(now.getTime() / 1000);
+        const candidates = [];
+
+        // Check events due today (daysUntil === 0) and tomorrow (daysUntil === 1)
+        appState.events.forEach(ev => {
+          if (ev.reminderEnabled === false) return;
+          const remTime = ev.customTime || appState.settings.defaultTime || '08:00';
+          const [hh, mm] = remTime.split(':').map(x => parseInt(x, 10) || 0);
+
+          for (let offsetDays = 0; offsetDays <= 1; offsetDays++) {
+            const checkDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + offsetDays, hh, mm, 0);
+            const evMatchesDate = (checkDate.getMonth() + 1 === ev.month) && (checkDate.getDate() === ev.day);
+            const opt = appState.settings.advanceOption;
+
+            // Same-day reminder
+            if (evMatchesDate && (opt === 'same_day' || opt === 'both')) {
+              const targetSec = Math.floor(checkDate.getTime() / 1000);
+              if (targetSec > nowSec + 12 && targetSec < nowSec + 250000) {
+                candidates.push({ ev, targetSec, remTime, label: 'Celebration Today' });
+              }
+            }
+            // 1-day-before advance reminder
+            const nextDayDate = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate() + 1);
+            const evMatchesNextDay = (nextDayDate.getMonth() + 1 === ev.month) && (nextDayDate.getDate() === ev.day);
+            if (evMatchesNextDay && (opt === 'day_before' || opt === 'both')) {
+              const targetSec = Math.floor(checkDate.getTime() / 1000);
+              if (targetSec > nowSec + 12 && targetSec < nowSec + 250000) {
+                candidates.push({ ev, targetSec, remTime, label: 'Tomorrow Celebration Reminder' });
+              }
+            }
+          }
+        });
+
+        // If no real event is due today/tomorrow, also allow pre-scheduling the selected preview date's event if its time is later today
+        if (candidates.length === 0) {
+          const refDate = parsePreviewDate();
+          const sorted = [...appState.events]
+            .filter(e => e.reminderEnabled !== false)
+            .map(e => ({ ...e, daysLeft: getDaysUntilEvent(e.month, e.day, refDate) }))
+            .sort((a, b) => a.daysLeft - b.daysLeft);
+          if (sorted.length > 0) {
+            const nextEv = sorted[0];
+            const remTime = nextEv.customTime || appState.settings.defaultTime || '08:00';
+            const [hh, mm] = remTime.split(':').map(x => parseInt(x, 10) || 0);
+            const todayAtTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hh, mm, 0);
+            const targetSec = Math.floor(todayAtTime.getTime() / 1000);
+            if (targetSec > nowSec + 12 && nextEv.daysLeft <= 1) {
+              candidates.push({ ev: nextEv, targetSec, remTime, label: 'Scheduled OARA Reminder' });
+            }
+          }
+        }
+
+        if (candidates.length === 0) {
+          if (!silentToast) {
+            showToast('No remaining reminders later today/tomorrow to pre-schedule (use "Test Closed-App Alert (In 15s)" to test now!).', 'bg-indigo-700');
+          }
+          return;
+        }
+
+        let scheduledCount = 0;
+        candidates.forEach(item => {
+          const schedKey = `${topic}_${item.ev.id}_${item.targetSec}`;
+          if (scheduledMap[schedKey] && silentToast) return;
+          scheduledMap[schedKey] = true;
+          scheduledCount++;
+
+          const icon = item.ev.type === 'BIRTHDAY' ? '🎂 Birthday' : '💍 Anniversary';
+          const msgBody = `OARA ${item.label}: ${item.ev.name} (${icon} - ${formatShortDate(item.ev.month, item.ev.day)} at ${formatTime12h(item.remTime)}). Tap to open the OARA app and send WhatsApp wishes!`;
+
+          fetch(`https://ntfy.sh/${encodeURIComponent(topic)}`, {
+            method: 'POST',
+            body: msgBody,
+            headers: {
+              'Title': `🎉 OARA Reminder: ${item.ev.name}`,
+              'Priority': 'high',
+              'Tags': 'tada,calendar',
+              'At': String(item.targetSec),
+              'Click': window.location.origin + window.location.pathname
+            }
+          }).catch(() => {});
+        });
+
+        try {
+          localStorage.setItem(STORAGE_KEY_CLOUD_SCHEDULED, JSON.stringify(scheduledMap));
+        } catch (e) {}
+
+        const statusEl = document.getElementById('cloudScheduleStatusText');
+        if (statusEl && scheduledCount > 0) {
+          statusEl.textContent = `✅ Pre-scheduled ${scheduledCount} upcoming reminder(s) on ntfy.sh cloud server — will arrive even if you close the app!`;
+        }
+        if (!silentToast && scheduledCount > 0) {
+          showToast(`Pre-scheduled ${scheduledCount} cloud push notification(s) for when the app is closed!`, 'bg-emerald-600');
+        }
       }
 
       // ntfy.sh Push Notification Helper (Works on iOS & Android ntfy app)
@@ -2902,6 +3275,14 @@
         if (!appState.isAdminAuthenticated) return;
         document.getElementById('dataToolsModal').classList.remove('hidden');
       });
+      document.getElementById('heroTestInAppChimeBtn').addEventListener('click', () => {
+        if (!appState.isAdminAuthenticated) return;
+        document.getElementById('testNotificationBtn').click();
+      });
+      document.getElementById('heroTestClosedApp15sBtn').addEventListener('click', () => {
+        if (!appState.isAdminAuthenticated) return;
+        document.getElementById('testClosedAppPushBtn').click();
+      });
       document.getElementById('adminBarOpenRepoPackBtn').addEventListener('click', () => {
         if (!appState.isAdminAuthenticated) return;
         openRepoSyncModal();
@@ -2942,7 +3323,13 @@
       initEventListeners();
       renderAll();
       checkScheduledRemindersTick();
+      syncRemindersToBackgroundServiceWorker(true);
       setInterval(checkScheduledRemindersTick, 15000);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          checkScheduledRemindersTick();
+        }
+      });
     });
   </script>
 </body>
