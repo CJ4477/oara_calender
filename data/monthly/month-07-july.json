@@ -1,0 +1,74 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 7,
+  "monthName": "JULY",
+  "totalEvents": 6,
+  "events": [
+    {
+      "id": "oara-062",
+      "month": 7,
+      "day": 2,
+      "type": "BIRTHDAY",
+      "name": "Chrysa Mariam",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-063",
+      "month": 7,
+      "day": 4,
+      "type": "BIRTHDAY",
+      "name": "Neethu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-064",
+      "month": 7,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Aishwarya",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-065",
+      "month": 7,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Kochuthresia",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-066",
+      "month": 7,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Galwin Missan",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-067",
+      "month": 7,
+      "day": 28,
+      "type": "BIRTHDAY",
+      "name": "Rema Devi",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

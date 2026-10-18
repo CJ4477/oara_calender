@@ -1,0 +1,85 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 8,
+  "monthName": "AUGUST",
+  "totalEvents": 7,
+  "events": [
+    {
+      "id": "oara-068",
+      "month": 8,
+      "day": 1,
+      "type": "BIRTHDAY",
+      "name": "Brita",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-069",
+      "month": 8,
+      "day": 4,
+      "type": "BIRTHDAY",
+      "name": "Akshaya Prakash",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-070",
+      "month": 8,
+      "day": 6,
+      "type": "BIRTHDAY",
+      "name": "Vishnu B Nair",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-071",
+      "month": 8,
+      "day": 10,
+      "type": "BIRTHDAY",
+      "name": "Krishna Kumar",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-072",
+      "month": 8,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Sanal",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-073",
+      "month": 8,
+      "day": 27,
+      "type": "BIRTHDAY",
+      "name": "Anamika Varghese",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-074",
+      "month": 8,
+      "day": 31,
+      "type": "BIRTHDAY",
+      "name": "Athira",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 6,
+  "monthName": "JUNE",
+  "totalEvents": 9,
+  "events": [
+    {
+      "id": "oara-053",
+      "month": 6,
+      "day": 1,
+      "type": "BIRTHDAY",
+      "name": "Reena",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-054",
+      "month": 6,
+      "day": 9,
+      "type": "BIRTHDAY",
+      "name": "Bryta",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-055",
+      "month": 6,
+      "day": 9,
+      "type": "BIRTHDAY",
+      "name": "Akhil",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-056",
+      "month": 6,
+      "day": 10,
+      "type": "BIRTHDAY",
+      "name": "Clint Joy",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-057",
+      "month": 6,
+      "day": 11,
+      "type": "BIRTHDAY",
+      "name": "Nandu B Nair",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-058",
+      "month": 6,
+      "day": 14,
+      "type": "BIRTHDAY",
+      "name": "Helen Mariea",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-059",
+      "month": 6,
+      "day": 26,
+      "type": "BIRTHDAY",
+      "name": "Bijal Kumar",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-060",
+      "month": 6,
+      "day": 26,
+      "type": "ANNIVERSARY",
+      "name": "Antony & Reena",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-061",
+      "month": 6,
+      "day": 29,
+      "type": "BIRTHDAY",
+      "name": "Jes",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

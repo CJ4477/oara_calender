@@ -1,0 +1,140 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 11,
+  "monthName": "NOVEMBER",
+  "totalEvents": 12,
+  "events": [
+    {
+      "id": "oara-090",
+      "month": 11,
+      "day": 1,
+      "type": "ANNIVERSARY",
+      "name": "Ashakumar & Remadevi",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-091",
+      "month": 11,
+      "day": 3,
+      "type": "BIRTHDAY",
+      "name": "Shithu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-092",
+      "month": 11,
+      "day": 11,
+      "type": "BIRTHDAY",
+      "name": "Ram Kumar",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-093",
+      "month": 11,
+      "day": 11,
+      "type": "BIRTHDAY",
+      "name": "Anu Jes",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-094",
+      "month": 11,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Anna",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-095",
+      "month": 11,
+      "day": 18,
+      "type": "BIRTHDAY",
+      "name": "Balachandran Nair",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-096",
+      "month": 11,
+      "day": 19,
+      "type": "BIRTHDAY",
+      "name": "Rabna Jithin",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-097",
+      "month": 11,
+      "day": 20,
+      "type": "ANNIVERSARY",
+      "name": "Akhil & Tency",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-098",
+      "month": 11,
+      "day": 20,
+      "type": "BIRTHDAY",
+      "name": "Siju Joseph",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-099",
+      "month": 11,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Shijoy Thomas",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-100",
+      "month": 11,
+      "day": 27,
+      "type": "BIRTHDAY",
+      "name": "Sudhakaran",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-101",
+      "month": 11,
+      "day": 27,
+      "type": "ANNIVERSARY",
+      "name": "Sanal & Anju",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 12,
+  "monthName": "DECEMBER",
+  "totalEvents": 4,
+  "events": [
+    {
+      "id": "oara-102",
+      "month": 12,
+      "day": 14,
+      "type": "BIRTHDAY",
+      "name": "Bhanu Bijal",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-103",
+      "month": 12,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Merina Roy",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-104",
+      "month": 12,
+      "day": 20,
+      "type": "BIRTHDAY",
+      "name": "Shyni",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-105",
+      "month": 12,
+      "day": 26,
+      "type": "ANNIVERSARY",
+      "name": "Jes & Anu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

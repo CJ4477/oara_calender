@@ -1,0 +1,96 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 4,
+  "monthName": "APRIL",
+  "totalEvents": 8,
+  "events": [
+    {
+      "id": "oara-026",
+      "month": 4,
+      "day": 8,
+      "type": "ANNIVERSARY",
+      "name": "Susmita Marry",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-027",
+      "month": 4,
+      "day": 10,
+      "type": "ANNIVERSARY",
+      "name": "Yamuna & Sudhakaran",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-028",
+      "month": 4,
+      "day": 12,
+      "type": "BIRTHDAY",
+      "name": "David",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-029",
+      "month": 4,
+      "day": 16,
+      "type": "BIRTHDAY",
+      "name": "Yamuna",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-030",
+      "month": 4,
+      "day": 24,
+      "type": "ANNIVERSARY",
+      "name": "Francis & Angel",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-031",
+      "month": 4,
+      "day": 24,
+      "type": "ANNIVERSARY",
+      "name": "Vishnu & Aishwarya",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-032",
+      "month": 4,
+      "day": 24,
+      "type": "BIRTHDAY",
+      "name": "Antony Missan",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-033",
+      "month": 4,
+      "day": 29,
+      "type": "ANNIVERSARY",
+      "name": "Philomina & Xavier",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

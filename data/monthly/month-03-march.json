@@ -1,0 +1,74 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 3,
+  "monthName": "MARCH",
+  "totalEvents": 6,
+  "events": [
+    {
+      "id": "oara-020",
+      "month": 3,
+      "day": 3,
+      "type": "BIRTHDAY",
+      "name": "Athul Krishna",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-021",
+      "month": 3,
+      "day": 15,
+      "type": "BIRTHDAY",
+      "name": "Susmitha Mary",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-022",
+      "month": 3,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Dixy",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": "Listed in March table (printed as 17-May in PDF)"
+    },
+    {
+      "id": "oara-023",
+      "month": 3,
+      "day": 18,
+      "type": "BIRTHDAY",
+      "name": "Shreya Krishna",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-024",
+      "month": 3,
+      "day": 21,
+      "type": "ANNIVERSARY",
+      "name": "Midhun & Athira",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-025",
+      "month": 3,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Antony",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

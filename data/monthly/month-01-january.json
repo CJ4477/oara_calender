@@ -1,0 +1,118 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 1,
+  "monthName": "JANUARY",
+  "totalEvents": 10,
+  "events": [
+    {
+      "id": "oara-001",
+      "month": 1,
+      "day": 2,
+      "type": "BIRTHDAY",
+      "name": "Jithin Raj",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-002",
+      "month": 1,
+      "day": 12,
+      "type": "BIRTHDAY",
+      "name": "Mirah Nandu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-003",
+      "month": 1,
+      "day": 17,
+      "type": "BIRTHDAY",
+      "name": "Sidharth Dev",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-004",
+      "month": 1,
+      "day": 17,
+      "type": "ANNIVERSARY",
+      "name": "Shithu & Sijo",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-005",
+      "month": 1,
+      "day": 18,
+      "type": "ANNIVERSARY",
+      "name": "Shery & George",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-006",
+      "month": 1,
+      "day": 20,
+      "type": "BIRTHDAY",
+      "name": "N Soman",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-007",
+      "month": 1,
+      "day": 20,
+      "type": "BIRTHDAY",
+      "name": "Jerin S",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-008",
+      "month": 1,
+      "day": 21,
+      "type": "ANNIVERSARY",
+      "name": "Akshaya",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-009",
+      "month": 1,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Mridhul Raj",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-010",
+      "month": 1,
+      "day": 28,
+      "type": "ANNIVERSARY",
+      "name": "Ram & Neethu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}

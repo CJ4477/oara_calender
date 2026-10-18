@@ -1,0 +1,107 @@
+{
+  "organization": "Orchid Avenue Residents Association (OARA)",
+  "monthNumber": 2,
+  "monthName": "FEBRUARY",
+  "totalEvents": 9,
+  "events": [
+    {
+      "id": "oara-011",
+      "month": 2,
+      "day": 2,
+      "type": "ANNIVERSARY",
+      "name": "Nandu & Sethulakshmi",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-012",
+      "month": 2,
+      "day": 7,
+      "type": "BIRTHDAY",
+      "name": "Nanika Ram",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-013",
+      "month": 2,
+      "day": 9,
+      "type": "BIRTHDAY",
+      "name": "Midhun Raj",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-014",
+      "month": 2,
+      "day": 9,
+      "type": "ANNIVERSARY",
+      "name": "Shijoy & Rentu",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-015",
+      "month": 2,
+      "day": 13,
+      "type": "BIRTHDAY",
+      "name": "Xavier",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-016",
+      "month": 2,
+      "day": 16,
+      "type": "BIRTHDAY",
+      "name": "Shiji Krishna Kumar",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-017",
+      "month": 2,
+      "day": 22,
+      "type": "BIRTHDAY",
+      "name": "Smrithi",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-018",
+      "month": 2,
+      "day": 24,
+      "type": "BIRTHDAY",
+      "name": "Rigvedha",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    },
+    {
+      "id": "oara-019",
+      "month": 2,
+      "day": 25,
+      "type": "ANNIVERSARY",
+      "name": "Soman & Kochuthresia",
+      "customTime": "",
+      "reminderEnabled": true,
+      "phone": "",
+      "notes": ""
+    }
+  ]
+}
